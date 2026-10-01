@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Squished Squashes</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -19,13 +19,13 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Length)
+                @Html.DisplayNameFor(model => model.Runtime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Genres)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DateTime)
+                @Html.DisplayNameFor(model => model.Rating)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Synopsis)
@@ -43,13 +43,13 @@
                 @Html.DisplayFor(model => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Length)
+                @Html.DisplayFor(model => item.Runtime)
             </td>
             <td>
                 @Html.DisplayFor(model => item.Genres)
             </td>
             <td>
-                @Html.DisplayFor(model => item.DateTime)
+                @Html.DisplayFor(model => item.Rating)
             </td>
             <td>
                 @Html.DisplayFor(model => item.Synopsis)
