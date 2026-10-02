@@ -1,4 +1,4 @@
-﻿//Sprint 1 is what this is working towards
+﻿//Sprint 1
 //Notes: movies must be sorted by release date, build according to the specifications set
 
 using System.ComponentModel.DataAnnotations;
