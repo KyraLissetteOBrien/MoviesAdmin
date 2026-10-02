@@ -39,8 +39,16 @@ namespace MoviesAdmin.Models
         //can later add a box for trivia/a fun fact about the film 
 
         //7
-        [Display(Name = "Release Date", Prompt = "The day doesn't display, selections display month and year")]
+        [Display(Name = "Release Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = true)] //research further for ease/sensibility in entry for month year is the most common listing, but some only have year 
         public DateTime ReleaseDate { get; set; }
+
+        //8 - fun fact (ensure its linked and added)
+        [Display(Name = "Fun Fact", Prompt = "Like: This movie was filmed using mic'd bees")]
+        public string FunFact { get; set; } = string.Empty;
+
+        //9 - director(s) (ensure its linked and added)
+        [Display(Prompt = "Enter at least 1")]
+        public string Directors { get; set; } = string.Empty;
     }
 }

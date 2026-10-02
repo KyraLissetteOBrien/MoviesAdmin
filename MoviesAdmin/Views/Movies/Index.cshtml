@@ -32,6 +32,15 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ReleaseDate)
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FunFact)
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Directors)
+
             </th>
             <th></th>
         </tr>
@@ -57,8 +66,14 @@
             <td>
                 @Html.DisplayFor(model => item.Synopsis)
             </td>
-             <td>
-                    @Html.DisplayFor(model => item.ReleaseDate)
+                <td>
+                @Html.DisplayFor(model => item.ReleaseDate)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.FunFact)
+            </td>
+            <td>
+                @Html.DisplayFor(model => item.Directors)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
