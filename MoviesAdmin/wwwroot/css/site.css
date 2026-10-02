@@ -10,7 +10,7 @@ html {
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-    color: yellow;
+    color: darkolivegreen;
 }
 
 html {
@@ -30,19 +30,6 @@ h1 {
     .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
         color: var(--bs-secondary-color);
         text-align: end;
-    }
-
-    thead {
-        color: darkolivegreen;
-    }
-
-    header {
-        color: darkgoldenrod;
-    }
-
-    thead {
-        color: darkgoldenrod;
-
     }
 
     .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
