@@ -14,7 +14,7 @@ namespace MoviesAdmin.Models
         //2
         public string Title { get; set; } = string.Empty;
 
-        //2
+        //2 - Found via https://www.imdb.com/
         public string Description { get; set; } = string.Empty;
 
         //3
@@ -24,14 +24,21 @@ namespace MoviesAdmin.Models
         public int Runtime { get; set; }
 
         //4
+        [Display(Name = "Viewer Classification", Prompt = "For example: Rated E, PG-13, R")]
         public string Rating { get; set; } = string.Empty;
 
         //5
         [Display(Prompt = "Enter as follows: Comedy, Horror, Documentary")]
         [Required]
-        public string Genres { get; set; } = string.Empty; //so far this prompt works as a full website, but crunched down it gets cut off (pay mind to responsitivity in later development
+        public string Genres { get; set; } = string.Empty;
+        //so far this ^ prompt works as a full website, but crunched down it gets cut off (pay mind to responsitivity in later development
 
-        //6
+        //6 
         public string Synopsis { get; set; } = string.Empty;
+
+        //can later add a box for trivia/a fun fact about the film 
+
+        //7
+        public DateTime ReleaseDate { get; set; }
     }
 }
