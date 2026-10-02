@@ -40,7 +40,7 @@ namespace MoviesAdmin.Models
 
         //7
         [Display(Name = "Release Date", Prompt = "The day doesn't display, selections display month and year")]
-        [DisplayFormat(DataFormatString = "{0:MMMM yyyy}", ApplyFormatInEditMode = true)] //research further for ease/sensibility in entry for month year is the most common listing, but some only have year 
+        [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = true)] //research further for ease/sensibility in entry for month year is the most common listing, but some only have year 
         public DateTime ReleaseDate { get; set; }
     }
 }
