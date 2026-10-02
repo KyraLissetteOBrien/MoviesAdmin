@@ -39,6 +39,7 @@ namespace MoviesAdmin.Models
         //can later add a box for trivia/a fun fact about the film 
 
         //7
+        [Display(Name = "Release Date")]
         public DateTime ReleaseDate { get; set; }
     }
 }
