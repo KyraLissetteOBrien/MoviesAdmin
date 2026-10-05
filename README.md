@@ -13,5 +13,5 @@ https://getbootstrap.com/
 IDE: 
 https://visualstudio.microsoft.com/ 
 
-A WIP in its early stages. 
+A sneak peak at this WIP website in its early stages. 
 <img width="1136" height="653" alt="image" src="https://github.com/user-attachments/assets/d8014d4d-cf50-43ca-90bf-943919735486" />
