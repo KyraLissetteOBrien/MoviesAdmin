@@ -1,14 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesAdmin.Models;
+//using MoviesAdmin.Services; // - 
 
 public class MoviesController : Controller
 {
     private readonly MoviesAdminContext _context;
+    //private readonly AzureStorageService _blobService; // - 
 
-    public MoviesController(MoviesAdminContext context)
+    public MoviesController(MoviesAdminContext context) // - Addition of AzureStorageService blobService 
     {
         _context = context;
+        //_blobService = blobService;
     }
 
     // GET: Movies
@@ -50,7 +53,7 @@ public class MoviesController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind("Id,Title,Description,Runtime,Genres,Rating,Synopsis,Release,DateFunFact,Directors")] Movie movie)
+        [Bind("Id,Title,Description,Runtime,Genres,Rating,Synopsis,Release,DateFunFact,Directors")] Movie movie) // - add image stuffs
     {
         if (ModelState.IsValid)
         {
@@ -85,7 +88,7 @@ public class MoviesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         int? id,
-        [Bind("Id,Title,Description,Genres,Rating,Runtime,Synopsis,ReleaseDate,FunFact,Directors")] Movie movie)
+        [Bind("Id,Title,Description,Genres,Rating,Runtime,Synopsis,ReleaseDate,FunFact,Directors")] Movie movie, IFormFile ImageFile) // - 
     {
         if (id != movie.Id)
         {
@@ -94,6 +97,11 @@ public class MoviesController : Controller
 
         if (ModelState.IsValid)
         {
+            // Save file in Azure Storage 
+            //string imageUrl = await _blobServcie.UploadFileAsync(ImageFile, ImageFile.FileName); // - 
+
+            // Save image URL in Movies record 
+            //movie.ImageUrl = imageUrl; // - 
             try
             {
                 _context.Update(movie);

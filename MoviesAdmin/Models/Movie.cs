@@ -12,9 +12,12 @@ namespace MoviesAdmin.Models
         public int Id { get; set; }
 
         //2
+        [StringLength(179)] // based on the Guinness World Record for the longest film title, which the english version of, is called Revenge. 
+        [Required]
         public string Title { get; set; } = string.Empty;
 
         //2 - Found via https://www.imdb.com/
+        [StringLength(4266)] // based on the longest Wikepedia summary currently, for Alley Cats Strike 
         public string Description { get; set; } = string.Empty;
 
         //3
@@ -34,6 +37,7 @@ namespace MoviesAdmin.Models
         //so far this ^ prompt works as a full website, but crunched down it gets cut off (pay mind to responsitivity in later development
 
         //6 
+        [StringLength(4266)]
         public string Synopsis { get; set; } = string.Empty;
 
         //can later add a box for trivia/a fun fact about the film 
@@ -50,5 +54,14 @@ namespace MoviesAdmin.Models
         //9 - director(s) (ensure its linked and added)
         [Display(Prompt = "Enter at least 1")]
         public string Directors { get; set; } = string.Empty;
+
+        //10 - URL to make the image store in Azure 
+        public string ImageUrl { get; set; } = string.Empty;
+
+        //11 - Time stamping for when the entry was saved 
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy")]
+        [Display(Name = "Created")]
+        [Required]
+        public DateTime CreatedDate { get; set; } = DateTime.Now; // default to current time using the built in functionality 
     }
 }

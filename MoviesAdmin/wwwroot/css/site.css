@@ -36,3 +36,13 @@ h1 {
         text-align: start;
     }
 }
+
+    .logo {
+        width: 100px;
+        height: auto;
+    }
+
+    .thumbnail {
+        width: 150px;
+        height: auto;
+    }
