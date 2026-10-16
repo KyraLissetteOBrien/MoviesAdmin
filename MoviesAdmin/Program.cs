@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using MoviesAdmin.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("MoviesAdminContext") ?? throw new InvalidOperationException("Connection string 'MoviesAdminContext' not found."); 
 

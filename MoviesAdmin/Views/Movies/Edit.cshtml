@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -58,6 +58,23 @@
                     <span asp-validation-for="Directors" class="text-danger"></span>
                 </div>
             </div>
+                <div class="form-group mb-3">
+                <label class="control-label d-block">Current poster</label>
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img id="posterPreview" src="@Model.ImageUrl" alt="Current poster for @Model.Title" class="poster-large mb-2" />
+                }
+                else
+                {
+                    <img id="posterPreview" class="poster-large d-none mb-2" alt="Preview of the selected poster" />
+                    <p class="text-muted">No poster yet.</p>
+                }
+                <label for="imageFile" class="control-label d-block">Replace poster (optional)</label>
+                <input type="file" id="imageFile" name="imageFile" class="form-control"
+                       accept=".jpg,.jpeg,.png,.webp" />
+                <div class="form-text">Leave empty to keep the current poster. JPG, PNG or WebP, up to 5 MB.</div>
+                <span class="text-danger">@Html.ValidationMessage("imageFile")</span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -71,4 +88,16 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // when a new image is chosen, show it in place of the current poster before saving
+        document.getElementById("imageFile").addEventListener("change", function () {
+            const file = this.files[0];
+            const preview = document.getElementById("posterPreview");
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.alt = "Preview of the new poster";
+                preview.classList.remove("d-none");
+            }
+        });
+    </script>
 }

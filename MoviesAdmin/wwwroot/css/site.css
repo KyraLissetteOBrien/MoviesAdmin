@@ -46,3 +46,19 @@ h1 {
         width: 150px;
         height: auto;
     }
+
+/* Movie posters (File Handling)
+   A fixed aspect ratio keeps every row the same height. "contain" shrinks the poster
+   to fit instead of cropping it, so the title printed on the poster is never cut off. */
+.poster-thumb {
+    width: 80px;
+    aspect-ratio: 2 / 3;
+    object-fit: contain;
+}
+
+.poster-large {
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 2 / 3;
+    object-fit: contain;
+}

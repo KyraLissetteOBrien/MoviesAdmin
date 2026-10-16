@@ -2,14 +2,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesAdmin.Models;
 using MoviesAdmin.Services;
-using System.Reflection.Metadata.Ecma335;
 
 public class MoviesController : Controller
 {
     private readonly MoviesAdminContext _context;
-    private readonly AzureStorageService _blobService; 
+    private readonly AzureStorageService _blobService;
 
-    public MoviesController(MoviesAdminContext context) 
+    // Poster rules shown to the user as validation messages
+    private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+    private const long MaxImageBytes = 5 * 1024 * 1024; // 5 MB
+
+    // Constructor - the framework "injects" the database context and the upload service (Dependency Injection)
+    public MoviesController(MoviesAdminContext context, AzureStorageService blobService)
     {
         _context = context;
         _blobService = blobService;
@@ -28,7 +32,6 @@ public class MoviesController : Controller
     // GET: Movies/Details/5
     public async Task<IActionResult> Details(int? id)
     {
-        // check if the id parameter is null from the URL
         if (id == null)
         {
             return NotFound();
@@ -36,9 +39,6 @@ public class MoviesController : Controller
 
         var movie = await _context.Movie
             .FirstOrDefaultAsync(m => m.Id == id);
-
-        // retrieve the movie with the specified id from the database
-        var trail = await _context.Trail.FirstOrDefaultAsync(mbox => mbox.Id == id);
 
         if (movie == null)
         {
@@ -48,8 +48,6 @@ public class MoviesController : Controller
         return View(movie);
     }
 
-    // to do - handle image being required 
-
     // GET: Movies/Create
     public IActionResult Create()
     {
@@ -57,31 +55,44 @@ public class MoviesController : Controller
     }
 
     // POST: Movies/Create
+    // The form is "multipart/form-data", so the text fields are bound to "movie"
+    // and the chosen file arrives as "imageFile" (the name of the <input type="file">).
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind("Id,Title,Description,Runtime,Genres,Rating,Synopsis,Release,DateFunFact,Directors")] Movie movie, IFormFile imageFile)
+        [Bind("Id,Title,Description,Runtime,Genres,Rating,Synopsis,ReleaseDate,FunFact,Directors")] Movie movie,
+        IFormFile? imageFile)
     {
+        // an image is REQUIRED when creating a movie - give the user feedback if it is missing or not allowed
+        if (imageFile == null || imageFile.Length == 0)
+        {
+            ModelState.AddModelError("imageFile", "Please choose a poster image.");
+        }
+        else if (CheckImage(imageFile) is string imageError)
+        {
+            ModelState.AddModelError("imageFile", imageError);
+        }
+
+        // ImageUrl is filled in by the server below, not typed into the form, so don't validate it
+        ModelState.Remove(nameof(Movie.ImageUrl));
+
         if (ModelState.IsValid)
         {
+            // save file in Azure storage using a unique (GUID) name so files never overwrite each other
+            string imageUrl = await _blobService.UploadFileAsync(imageFile!, NewFileName(imageFile!));
 
-            // save file in Azure storage
-            string imageUrl = await _blobService.UploadFileAsync(imageFile, imageFile.FileName);
-
-            // save image in Url movie record
+            // capture the URL as part of the movie record
             movie.ImageUrl = imageUrl;
 
-            // save record in database 
+            // save record in database
             _context.Add(movie);
             await _context.SaveChangesAsync();
 
-            // redirect to the index action after successfully creating the trail
             return RedirectToAction(nameof(Index));
         }
 
         return View(movie);
     }
-
 
     // GET: Movies/Edit/5
     public async Task<IActionResult> Edit(int? id)
@@ -102,19 +113,48 @@ public class MoviesController : Controller
     }
 
     // POST: Movies/Edit/5
+    // Changing the poster is OPTIONAL: if no new file is chosen, the existing image stays.
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
         int? id,
-        [Bind("Id,Title,Description,Genres,Rating,Runtime,Synopsis,ReleaseDate,FunFact,Directors")] Movie movie, IFormFile ImageFile) // - 
+        [Bind("Id,Title,Description,Genres,Rating,Runtime,Synopsis,ReleaseDate,FunFact,Directors")] Movie movie,
+        IFormFile? imageFile)
     {
         if (id != movie.Id)
         {
             return NotFound();
         }
 
+        // only validate the file if the user actually picked a new one
+        bool replacingImage = imageFile != null && imageFile.Length > 0;
+        if (replacingImage && CheckImage(imageFile!) is string imageError)
+        {
+            ModelState.AddModelError("imageFile", imageError);
+        }
+
+        // ImageUrl is not part of the form, so don't validate it
+        ModelState.Remove(nameof(Movie.ImageUrl));
+
+        // read what is currently saved (AsNoTracking = read only copy) so editing the title
+        // doesn't wipe the image URL or the created date, which the form doesn't send back
+        var existing = await _context.Movie.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
+        if (existing == null)
+        {
+            return NotFound();
+        }
+
         if (ModelState.IsValid)
         {
+            movie.ImageUrl = existing.ImageUrl;
+            movie.CreatedDate = existing.CreatedDate;
+
+            if (replacingImage)
+            {
+                // upload the new poster and store its URL on the record
+                movie.ImageUrl = await _blobService.UploadFileAsync(imageFile!, NewFileName(imageFile!));
+            }
+
             try
             {
                 _context.Update(movie);
@@ -130,9 +170,17 @@ public class MoviesController : Controller
                 throw;
             }
 
+            // only after the database is saved, remove the OLD poster so no orphaned file is left
+            if (replacingImage)
+            {
+                await _blobService.DeleteFileAsync(existing.ImageUrl);
+            }
+
             return RedirectToAction(nameof(Index));
         }
 
+        // redisplay the form: put the saved image URL back so the current poster still shows
+        movie.ImageUrl = existing.ImageUrl;
         return View(movie);
     }
 
@@ -165,9 +213,11 @@ public class MoviesController : Controller
         if (movie != null)
         {
             _context.Movie.Remove(movie);
-        }
+            await _context.SaveChangesAsync();
 
-        await _context.SaveChangesAsync();
+            // delete the poster file too, so deleting a movie doesn't leave an orphaned file in storage
+            await _blobService.DeleteFileAsync(movie.ImageUrl);
+        }
 
         return RedirectToAction(nameof(Index));
     }
@@ -176,5 +226,28 @@ public class MoviesController : Controller
     {
         return _context.Movie.Any(e => e.Id == id);
     }
-}
 
+    // Returns an error message if the file isn't an allowed image, otherwise null
+    private static string? CheckImage(IFormFile file)
+    {
+        string extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+        if (!AllowedExtensions.Contains(extension))
+        {
+            return "The poster must be a JPG, PNG or WebP image.";
+        }
+
+        if (file.Length > MaxImageBytes)
+        {
+            return "The poster must be 5 MB or smaller.";
+        }
+
+        return null;
+    }
+
+    // Unique file name (GUID) so uploading two files with the same name never overwrites one
+    private static string NewFileName(IFormFile file)
+    {
+        return $"{Guid.NewGuid()}{Path.GetExtension(file.FileName).ToLowerInvariant()}";
+    }
+}

@@ -10,8 +10,10 @@
 <p>
     <a asp-action="Create">Add New Entry</a>
 </p>
-<table class="table">
+<div class="table-responsive">
+<table class="table align-middle">
     <thead>
+        <th>Poster</th>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Title)
@@ -50,6 +52,19 @@
 @foreach (var item in Model) {
         <tr>
             <td>
+                @* thumbnail: click it to see the bigger version on the Details page *@
+                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                {
+                    <a asp-action="Details" asp-route-id="@item.Id">
+                        <img src="@item.ImageUrl" alt="Poster for @item.Title" class="poster-thumb" />
+                    </a>
+                }
+                else
+                {
+                    <span class="text-muted">No poster</span>
+                }
+            </td>
+            <td>
                 @Html.DisplayFor(model => item.Title)
             </td>
             <td>
@@ -84,4 +99,5 @@
         </tr>
 }
     </tbody>
+</div>
 </table>

@@ -9,6 +9,11 @@
 <div>
     <h4>Movie</h4>
     <hr />
+        @* bigger version of the poster (the Index page shows the small thumbnail) *@
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <img src="@Model.ImageUrl" alt="Poster for @Model.Title" class="poster-large mb-4" />
+    }
     <dl class="row">
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)

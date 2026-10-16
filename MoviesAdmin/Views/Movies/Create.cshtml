@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -64,13 +64,34 @@
                 <input asp-for="Directors" class="form-control" />
                 <span asp-validation-for="Directors" class="text-danger"></span>
             </div>
+            <div class="form-group mb-3">
+                <label for="imageFile" class="control-label">Poster image</label>
+                <input type="file" id="imageFile" name="imageFile" class="form-control"
+                       accept=".jpg,.jpeg,.png,.webp" required />
+                <div class="form-text">JPG, PNG or WebP, up to 5 MB.</div>
+                <span class="text-danger">@Html.ValidationMessage("imageFile")</span>
+            </div>
+            <img id="posterPreview" class="poster-large d-none mb-3" alt="Preview of the selected poster" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
-
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // show a preview of the chosen image before it is uploaded
+        document.getElementById("imageFile").addEventListener("change", function () {
+            const file = this.files[0];
+            const preview = document.getElementById("posterPreview");
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.classList.remove("d-none");
+            }
+        });
+    </script>
+}
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

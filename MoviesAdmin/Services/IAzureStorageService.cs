@@ -1,12 +1,13 @@
 ﻿namespace MoviesAdmin.Services
-
 {
     public interface IAzureStorageService
     {
-        //Service to upload file to Azure Blob Storage
+        // Upload a file to Azure Blob Storage (Azurite while developing)
         // return: the URL of the uploaded file as a string
         public Task<string> UploadFileAsync(IFormFile file, string fileName);
 
-        // to do: add a new function to delete a file to handle when a trail record is deleted 
+        // Delete the file a URL points to (when a movie is deleted or its poster is replaced)
+        // Does nothing if the URL is empty or the file is already gone.
+        public Task DeleteFileAsync(string fileUrl);
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using MoviesAdmin.Services;
 
 namespace MoviesAdmin.Services
 {
@@ -17,11 +16,17 @@ namespace MoviesAdmin.Services
             // configuration is used to get appsettings, user-secrets, env vars, etc.
             _configuration = configuration;
 
-            // get Azure Storage container name
-            containerName = _configuration["AzureStorage:ContainerName"] ?? throw new InvalidOperationException("Missing configuration: AzureStorage:ContainerName");
+            // get Azure Storage container name (appsettings.json)
+            containerName = _configuration["AzureStorage:ContainerName"]
+                ?? throw new InvalidOperationException("Missing configuration: AzureStorage:ContainerName");
 
-            // get Azure Storage connection string
-            string connectionString = _configuration["AzureStorage:ConnectionString"] ?? throw new InvalidOperationException("Missing configuration: AzureStorage:ConnectionString");
+            // get Azure Storage connection string (kept in user-secrets, not in the repo)
+            string connectionString = _configuration["AzureStorage:ConnectionString"] ?? "";
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                throw new InvalidOperationException(
+                    "Missing configuration: AzureStorage:ConnectionString. Add it to user-secrets (right-click the project > Manage User Secrets).");
+            }
 
             // initialize Azure blob client
             blobServiceClient = new BlobServiceClient(connectionString);
@@ -34,7 +39,7 @@ namespace MoviesAdmin.Services
 
             var blobClient = containerClient.GetBlobClient(fileName);
 
-            // Claude ai helped - a known problem
+            // set the content type so the browser shows the image instead of downloading it
             var options = new BlobUploadOptions
             {
                 HttpHeaders = new BlobHttpHeaders
@@ -51,6 +56,22 @@ namespace MoviesAdmin.Services
 
             // return the URL for the saved file
             return blobClient.Uri.ToString();
+        }
+
+        public async Task DeleteFileAsync(string fileUrl)
+        {
+            if (string.IsNullOrWhiteSpace(fileUrl) || !Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri))
+            {
+                return;
+            }
+
+            // the blob name is the last part of the URL, e.g. 3f2b9c1e-....jpg
+            string blobName = Path.GetFileName(Uri.UnescapeDataString(uri.AbsolutePath));
+
+            var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+            // DeleteIfExists so a missing file doesn't crash the delete/edit
+            await containerClient.GetBlobClient(blobName).DeleteIfExistsAsync();
         }
     }
 }

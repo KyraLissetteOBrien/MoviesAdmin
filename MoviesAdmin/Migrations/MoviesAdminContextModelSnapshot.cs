@@ -16,7 +16,7 @@ namespace MoviesAdmin.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -29,12 +29,12 @@ namespace MoviesAdmin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-
-                    b.Property<string>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(4266)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Directors")
@@ -46,6 +46,10 @@ namespace MoviesAdmin.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Genres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -61,11 +65,13 @@ namespace MoviesAdmin.Migrations
 
                     b.Property<string>("Synopsis")
                         .IsRequired()
+                        .HasMaxLength(4266)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(179)
+                        .HasColumnType("nvarchar(179)");
 
                     b.HasKey("Id");
 
