@@ -1,17 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MoviesAdmin.Models;
-//using MoviesAdmin.Services; // - 
+using MoviesAdmin.Services;
+using System.Reflection.Metadata.Ecma335;
 
 public class MoviesController : Controller
 {
     private readonly MoviesAdminContext _context;
-    //private readonly AzureStorageService _blobService; // - 
+    private readonly AzureStorageService _blobService; 
 
-    public MoviesController(MoviesAdminContext context) // - Addition of AzureStorageService blobService 
+    public MoviesController(MoviesAdminContext context) 
     {
         _context = context;
-        //_blobService = blobService;
+        _blobService = blobService;
     }
 
     // GET: Movies
@@ -27,6 +28,7 @@ public class MoviesController : Controller
     // GET: Movies/Details/5
     public async Task<IActionResult> Details(int? id)
     {
+        // check if the id parameter is null from the URL
         if (id == null)
         {
             return NotFound();
@@ -35,6 +37,9 @@ public class MoviesController : Controller
         var movie = await _context.Movie
             .FirstOrDefaultAsync(m => m.Id == id);
 
+        // retrieve the movie with the specified id from the database
+        var trail = await _context.Trail.FirstOrDefaultAsync(mbox => mbox.Id == id);
+
         if (movie == null)
         {
             return NotFound();
@@ -42,6 +47,8 @@ public class MoviesController : Controller
 
         return View(movie);
     }
+
+    // to do - handle image being required 
 
     // GET: Movies/Create
     public IActionResult Create()
@@ -53,17 +60,28 @@ public class MoviesController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        [Bind("Id,Title,Description,Runtime,Genres,Rating,Synopsis,Release,DateFunFact,Directors")] Movie movie) // - add image stuffs
+        [Bind("Id,Title,Description,Runtime,Genres,Rating,Synopsis,Release,DateFunFact,Directors")] Movie movie, IFormFile imageFile)
     {
         if (ModelState.IsValid)
         {
+
+            // save file in Azure storage
+            string imageUrl = await _blobService.UploadFileAsync(imageFile, imageFile.FileName);
+
+            // save image in Url movie record
+            movie.ImageUrl = imageUrl;
+
+            // save record in database 
             _context.Add(movie);
             await _context.SaveChangesAsync();
+
+            // redirect to the index action after successfully creating the trail
             return RedirectToAction(nameof(Index));
         }
 
         return View(movie);
     }
+
 
     // GET: Movies/Edit/5
     public async Task<IActionResult> Edit(int? id)
@@ -97,11 +115,6 @@ public class MoviesController : Controller
 
         if (ModelState.IsValid)
         {
-            // Save file in Azure Storage 
-            //string imageUrl = await _blobServcie.UploadFileAsync(ImageFile, ImageFile.FileName); // - 
-
-            // Save image URL in Movies record 
-            //movie.ImageUrl = imageUrl; // - 
             try
             {
                 _context.Update(movie);
