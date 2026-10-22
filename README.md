@@ -14,4 +14,5 @@ IDE:
 https://visualstudio.microsoft.com/ 
 
 A WIP in its early stages. 
-<img width="1136" height="653" alt="image" src="https://github.com/user-attachments/assets/d8014d4d-cf50-43ca-90bf-943919735486" />
+<img width="1268" height="668" alt="image" src="https://github.com/user-attachments/assets/d537b3d5-1174-4da0-8211-1ccbac6039c7" />
+
