@@ -266,3 +266,25 @@ th,
     .navbar-nav .nav-link:focus {
         color: #3f5220 !important;
     }
+
+/* ---- Movies table header: same tint as the Details labels ---- */
+.table thead th {
+    background-color: rgba(255, 255, 255, 0.25);
+    color: darkolivegreen;
+}
+
+/* ---- A very slight drop shadow on the boxed areas (Movies, Details, Create) ---- */
+.table,
+.details-box {
+    box-shadow: 0 2px 6px rgba(85, 107, 47, 0.18);
+}
+
+/* the scrolling wrapper around the Movies table would cut the shadow off, this gives it a little room */
+.table-responsive {
+    padding: 2px 8px 10px 2px;
+}
+
+/* Create and Edit boxes */
+.form-control {
+    box-shadow: 0 2px 4px rgba(85, 107, 47, 0.2);
+}
