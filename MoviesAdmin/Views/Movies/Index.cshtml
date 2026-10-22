@@ -1,11 +1,12 @@
 @model IEnumerable<MoviesAdmin.Models.Movie>
+@using Microsoft.AspNetCore.Html
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Welcome to Lengthy Lemons!</h1>
-<h2>...home of the longest films</h2>
+<h1>All Movies</h1>
+<h4 class="mb-4">The Popcorn Amounts Are Pending Your Entry...</h4>
 
 <p>
     <a asp-action="Create">Add New Entry</a>
@@ -13,7 +14,6 @@
 <div class="table-responsive">
 <table class="table align-middle">
     <thead>
-        <thead>
         <tr>
             <th>Poster</th>
             <th>
@@ -36,40 +36,44 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ReleaseDate)
-
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FunFact)
-
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Directors)
-
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
+        // turn line breaks typed in the textarea into <br /> so paragraphs display as paragraphs
+        // (HtmlEncode first so any < or & typed by the user is shown as text, not as HTML)
+        var descriptionWithBreaks = new HtmlString(
+            System.Net.WebUtility.HtmlEncode(item.Description)
+                .Replace("\r\n", "<br />")
+                .Replace("\n", "<br />")
+                .Replace("\r", "<br />"));
+
+        var synopsisWithBreaks = new HtmlString(
+            System.Net.WebUtility.HtmlEncode(item.Synopsis)
+                .Replace("\r\n", "<br />")
+                .Replace("\n", "<br />")
+                .Replace("\r", "<br />"));
+
         <tr>
             <td>
-                @* thumbnail: click it to see the bigger version on the Details page *@
-                @if (!string.IsNullOrEmpty(item.ImageUrl))
-                {
-                    <a asp-action="Details" asp-route-id="@item.Id">
-                        <img src="@item.ImageUrl" alt="Poster for @item.Title" class="poster-thumb" />
-                    </a>
-                }
-                else
-                {
-                    <span class="text-muted">No poster</span>
-                }
+                <img src="@item.ImageUrl" alt="@item.Title" class="poster-thumb" />
             </td>
             <td>
                 @Html.DisplayFor(model => item.Title)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Description)
+                @descriptionWithBreaks
             </td>
             <td>
                 @Html.DisplayFor(model => item.Runtime)
@@ -81,9 +85,9 @@
                 @Html.DisplayFor(model => item.Rating)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Synopsis)
+                @synopsisWithBreaks
             </td>
-                <td>
+            <td>
                 @Html.DisplayFor(model => item.ReleaseDate)
             </td>
             <td>
@@ -93,12 +97,15 @@
                 @Html.DisplayFor(model => item.Directors)
             </td>
             <td>
+                @Html.DisplayFor(model => item.CreatedDate)
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
-        </tbody>
+    </tbody>
 </table>
 </div>

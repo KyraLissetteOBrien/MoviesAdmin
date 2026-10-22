@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 namespace MoviesAdmin.Models
 {
     public class Movie
-     
+
     {
         //1
         public int Id { get; set; }
@@ -21,7 +21,7 @@ namespace MoviesAdmin.Models
         public string Description { get; set; } = string.Empty;
 
         //3
-        [Display(Name="Runtime (in Hours)")]
+        [Display(Name = "Runtime (in Hours)")]
         [Range(1, 857)] //as per the longest movie listed in Wikepedia
         [Required]
         public int Runtime { get; set; }
@@ -44,7 +44,7 @@ namespace MoviesAdmin.Models
 
         //7
         [Display(Name = "Release Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = false)] //research further for ease/sensibility in entry for month year is the most common listing, but some only have year 
+        [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = false)]
         public DateTime ReleaseDate { get; set; }
 
         //8 - fun fact (ensure its linked and added)
@@ -59,7 +59,7 @@ namespace MoviesAdmin.Models
         public string ImageUrl { get; set; } = string.Empty;
 
         //11 - Time stamping for when the entry was saved 
-        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy")]
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy}")]
         [Display(Name = "Created")]
         [Required]
         public DateTime CreatedDate { get; set; } = DateTime.Now; // default to current time using the built in functionality 

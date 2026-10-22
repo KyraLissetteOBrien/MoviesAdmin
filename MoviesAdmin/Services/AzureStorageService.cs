@@ -37,6 +37,9 @@ namespace MoviesAdmin.Services
             // get client for containerName (e.g. "uploads")
             var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
+            // Automatically creates the container directory in your new Docker/Azurite container if missing.
+            await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+
             var blobClient = containerClient.GetBlobClient(fileName);
 
             // set the content type so the browser shows the image instead of downloading it
@@ -56,6 +59,7 @@ namespace MoviesAdmin.Services
 
             // return the URL for the saved file
             return blobClient.Uri.ToString();
+
         }
 
         public async Task DeleteFileAsync(string fileUrl)

@@ -1,8 +1,17 @@
-﻿@* @{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">!</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div> *@
+    <h1 class="mt-5">Welcome to Lengthy Lemons</h1>
+    <h2 class="fst-italic mb-4">home of the longest films</h2>
+
+    <p class="lead mb-4">
+        We're collecting the lengthiest movies ever made, and every one is welcome here.
+        Whether it runs for a few hours or for days on end, add it to the collection! 
+    </p>
+    <h3 class="mb-4">Thank you for taking part</h3>
+
+    <a asp-controller="Movies" asp-action="Create" class="btn btn-primary me-2">Add New Entry</a>
+<a asp-controller="Movies" asp-action="Index" class="btn btn-primary">All Movies</a>
+</div>

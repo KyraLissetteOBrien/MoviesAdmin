@@ -1,72 +1,94 @@
 @model MoviesAdmin.Models.Movie
+@using Microsoft.AspNetCore.Html
 
 @{
     ViewData["Title"] = "Details";
+
+    // turn line breaks typed in the textarea into <br /> so paragraphs display as paragraphs
+    // (HtmlEncode first so any < or & typed by the user is shown as text, not as HTML)
+    var descriptionWithBreaks = new HtmlString(
+        System.Net.WebUtility.HtmlEncode(Model.Description)
+            .Replace("\r\n", "<br />")
+            .Replace("\n", "<br />")
+            .Replace("\r", "<br />"));
+
+    var synopsisWithBreaks = new HtmlString(
+        System.Net.WebUtility.HtmlEncode(Model.Synopsis)
+            .Replace("\r\n", "<br />")
+            .Replace("\n", "<br />")
+            .Replace("\r", "<br />"));
 }
 
 <h1>Details</h1>
+<hr />
 
-<div>
-    <h4>Movie</h4>
-    <hr />
-        @* bigger version of the poster (the Index page shows the small thumbnail) *@
-    @if (!string.IsNullOrEmpty(Model.ImageUrl))
-    {
-        <img src="@Model.ImageUrl" alt="Poster for @Model.Title" class="poster-large mb-4" />
-    }
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Runtime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Runtime)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genres)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genres)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Rating)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Rating)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Synopsis)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Synopsis)
-        </dd>
-    </dl>
-<dd class="col-sm-10">
-    @Html.DisplayFor(model => model.FunFact)
-</dd>
-</dl>
-<dd class="col-sm-10">
-    @Html.DisplayFor(model => model.Directors)
-</dd>
-</dl>
+<div class="details-box">
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">Poster</div>
+        <div class="col-sm-9 details-value">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="Poster for @Model.Title" class="poster-large" />
+            }
+            else
+            {
+                <span>No poster</span>
+            }
+        </div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Title)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Title)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Description)</div>
+        <div class="col-sm-9 details-value">@descriptionWithBreaks</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Runtime)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Runtime)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Genres)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Genres)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Rating)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Rating)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Synopsis)</div>
+        <div class="col-sm-9 details-value">@synopsisWithBreaks</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.ReleaseDate)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.ReleaseDate)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.FunFact)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.FunFact)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Directors)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Directors)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.CreatedDate)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.CreatedDate)</div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
 </div>
