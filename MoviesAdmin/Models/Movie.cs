@@ -1,15 +1,32 @@
-﻿//Sprint 1
-//Notes: movies must be sorted by release date, build according to the specifications set
+﻿//Sprint 1 (so far)
+//Notes: Build according to the specifications set
 
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MoviesAdmin.Models
 {
     public class Movie
 
     {
-        //1
+        //1 db: Primary key
         public int Id { get; set; }
+
+        // db: Foreign keys
+        [ForeignKey(nameof(Genre))]
+        public int GenreId { get; set; }
+
+        [ForeignKey(nameof(AudienceRating))]
+        public int AudienceRatingId { get; set; }
+
+        [ValidateNever]
+        public Genre Genre { get; set; } = null!; // Navigation property
+
+        [ValidateNever]
+        public AudienceRating AudienceRating { get; set; } = null!; // Navigation property
+
 
         //2
         [StringLength(179)] // based on the Guinness World Record for the longest film title, which the english version of, is called Revenge. 
@@ -27,31 +44,29 @@ namespace MoviesAdmin.Models
         public int Runtime { get; set; }
 
         //4
-        [Display(Name = "Viewer Classification", Prompt = "For example: Rated E, PG-13, R")]
-        public string Rating { get; set; } = string.Empty;
+        //[Display(Name = "Viewer Classification", Prompt = "For example: Rated E, PG-13, R")]
+        //public string Rating { get; set; } = string.Empty;
 
         //5
-        [Display(Prompt = "Enter as follows: Comedy, Horror, Documentary")]
-        [Required]
-        public string Genres { get; set; } = string.Empty;
-        //so far this ^ prompt works as a full website, but crunched down it gets cut off (pay mind to responsitivity in later development
+        //[Display(Prompt = "Enter as follows: Comedy, Horror, Documentary")]
+        //[Required]
+        //public string Genres { get; set; } = string.Empty;
+        //so far this ^ prompt works as a full website, but crunched down it gets cut off (pay mind to responsitivity in later development)
 
         //6 
         [StringLength(4266)]
         public string Synopsis { get; set; } = string.Empty;
-
-        //can later add a box for trivia/a fun fact about the film 
 
         //7
         [Display(Name = "Release Date")]
         [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = false)]
         public DateTime ReleaseDate { get; set; }
 
-        //8 - fun fact (ensure its linked and added)
+        //8 - fun fact 
         [Display(Name = "Fun Fact", Prompt = "Like: This movie was filmed using mic'd bees")]
         public string FunFact { get; set; } = string.Empty;
 
-        //9 - director(s) (ensure its linked and added)
+        //9 - director(s) 
         [Display(Prompt = "Enter at least 1")]
         public string Directors { get; set; } = string.Empty;
 

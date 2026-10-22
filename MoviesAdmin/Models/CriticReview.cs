@@ -8,8 +8,8 @@ namespace MoviesAdmin.Models
 
         public string Description { get; set; } = string.Empty;
 
-        [Range(1, 5)]
-        public int Rating { get; set; }
+        //[Range(1, 5)]
+        //public int Rating { get; set; }
 
         public bool IsPublished { get; set; }
 

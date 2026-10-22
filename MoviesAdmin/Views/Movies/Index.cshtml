@@ -25,12 +25,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Runtime)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Genres)
-            </th>
-            <th>
+            </th> *@
+            @* <th>
                 @Html.DisplayNameFor(model => model.Rating)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Synopsis)
             </th>
@@ -46,7 +46,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.CreatedDate)
             </th>
-            <th></th>
+                <th class="actions-header">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -78,12 +78,12 @@
             <td>
                 @Html.DisplayFor(model => item.Runtime)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(model => item.Genres)
             </td>
             <td>
                 @Html.DisplayFor(model => item.Rating)
-            </td>
+            </td> *@
             <td>
                 @synopsisWithBreaks
             </td>
