@@ -288,3 +288,9 @@ th,
 .form-control {
     box-shadow: 0 2px 4px rgba(85, 107, 47, 0.2);
 }
+
+.table thead th.actions-header {
+    background-color: #e4edc9;
+}
+
+
