@@ -165,7 +165,7 @@ public class MoviesController : Controller
             _context.Movie.Remove(movie);
             await _context.SaveChangesAsync();
 
-            // delete the image file from Azure Storage too
+            // Delete the image file from Azure Storage too
             await _blobService.DeleteFileAsync(movie.ImageUrl);
         }
 

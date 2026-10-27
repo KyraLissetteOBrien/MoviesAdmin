@@ -62,11 +62,11 @@ namespace MoviesAdmin.Models
         [DisplayFormat(DataFormatString = "{0:yyyy}", ApplyFormatInEditMode = false)]
         public DateTime ReleaseDate { get; set; }
 
-        //8 - fun fact 
+        //8 - Fun fact 
         [Display(Name = "Fun Fact", Prompt = "Like: This movie was filmed using mic'd bees")]
         public string FunFact { get; set; } = string.Empty;
 
-        //9 - director(s) 
+        //9 - Director(s) 
         [Display(Prompt = "Enter at least 1")]
         public string Directors { get; set; } = string.Empty;
 

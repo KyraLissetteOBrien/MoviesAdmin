@@ -7,10 +7,10 @@ namespace MoviesAdmin.Models
     {
         public int Id { get; set; }
 
-        [ValidateNever]
-        public List<AudienceRating> AudienceRatings { get; set; } = new List<AudienceRating>();
-
         [Display(Prompt = "For example: PG-13, R")]
         public string Title { get; set; } = string.Empty;
+
+        [ValidateNever]
+        public List<Movie> Movies { get; set; } = new List<Movie>();
     }
 }

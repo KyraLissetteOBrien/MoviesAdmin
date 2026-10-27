@@ -29,16 +29,11 @@ namespace MoviesAdmin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AudienceRatingId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AudienceRatingId");
 
                     b.ToTable("AudienceRating");
                 });
@@ -51,16 +46,11 @@ namespace MoviesAdmin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("GenreId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GenreId");
 
                     b.ToTable("Genre");
                 });
@@ -124,30 +114,16 @@ namespace MoviesAdmin.Migrations
                     b.ToTable("Movie");
                 });
 
-            modelBuilder.Entity("MoviesAdmin.Models.AudienceRating", b =>
-                {
-                    b.HasOne("MoviesAdmin.Models.AudienceRating", null)
-                        .WithMany("AudienceRatings")
-                        .HasForeignKey("AudienceRatingId");
-                });
-
-            modelBuilder.Entity("MoviesAdmin.Models.Genre", b =>
-                {
-                    b.HasOne("MoviesAdmin.Models.Genre", null)
-                        .WithMany("Genres")
-                        .HasForeignKey("GenreId");
-                });
-
             modelBuilder.Entity("MoviesAdmin.Models.Movie", b =>
                 {
                     b.HasOne("MoviesAdmin.Models.AudienceRating", "AudienceRating")
-                        .WithMany()
+                        .WithMany("Movies")
                         .HasForeignKey("AudienceRatingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MoviesAdmin.Models.Genre", "Genre")
-                        .WithMany()
+                        .WithMany("Movies")
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -159,12 +135,12 @@ namespace MoviesAdmin.Migrations
 
             modelBuilder.Entity("MoviesAdmin.Models.AudienceRating", b =>
                 {
-                    b.Navigation("AudienceRatings");
+                    b.Navigation("Movies");
                 });
 
             modelBuilder.Entity("MoviesAdmin.Models.Genre", b =>
                 {
-                    b.Navigation("Genres");
+                    b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618
         }

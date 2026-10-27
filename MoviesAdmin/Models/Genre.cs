@@ -6,9 +6,9 @@ namespace MoviesAdmin.Models
     {
         public int Id { get; set; }
 
-        [ValidateNever]
-        public List<Genre> Genres { get; set; } = new List<Genre>();
-
         public string Title { get; set; } = string.Empty;
+
+        [ValidateNever]
+        public List<Movie> Movies { get; set; } = new List<Movie>();
     }
 }

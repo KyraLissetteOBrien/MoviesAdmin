@@ -1,8 +1,7 @@
-/* ---- Lengthy Lemons colours (Inspired by the Dual Lemon Logo) ---- */
 :root {
-    --lemon-bar: #a9c86a; /* top bar: light lemon yellow */
-    --leaf-page: #dcebb4; /* page background: light leaf green */
-    --table-lines: #8fa65a; /* lines between table rows and columns */
+    --lemon-bar: #a9c86a; 
+    --leaf-page: #dcebb4; 
+    --table-lines: #8fa65a; 
 }
 
 html {
@@ -32,7 +31,6 @@ body {
     background-color: var(--leaf-page);
 }
 
-/* top bar: the layout gives it Bootstrap's bg-white, so this has to override it */
 .navbar.bg-white {
     background-color: var(--lemon-bar) !important;
 }
@@ -61,8 +59,6 @@ h1 {
     height: auto;
 }
 
-/* Movies table: let the page colour show through, and draw lines between the columns
-   as well as between the rows */
 .table {
     --bs-table-bg: transparent;
     --bs-table-border-color: var(--table-lines);
@@ -79,16 +75,12 @@ h1 {
             border-right: none;
         }
 
-/* Movie posters (File Handling)
-   A fixed aspect ratio keeps every row the same height. "contain" shrinks the poster
-   to fit instead of cropping it, so the title printed on the poster is never cut off. */
 .poster-thumb {
     width: 80px;
     aspect-ratio: 2 / 3;
     object-fit: contain;
 }
 
-/* Large poster (Details and Edit): natural shape, no empty space above/below */
 .poster-large {
     width: 100%;
     max-width: 300px;
@@ -99,7 +91,6 @@ h1 {
     border-bottom: 3px solid var(--table-lines) !important;
 }
 
-/* ---- Form boxes ---- */
 .form-label {
     font-weight: 600;
     margin-bottom: .35rem;
@@ -129,7 +120,6 @@ textarea.form-control {
     line-height: 1.5;
 }
 
-/* ---- Buttons in the lemon greens ---- */
 .btn {
     border-radius: .6rem;
 }
@@ -156,7 +146,6 @@ textarea.form-control {
     --bs-btn-active-color: #fff;
 }
 
-/* ---- Softer boxes: a pale leaf-cream instead of near-white ---- */
 .form-control {
     background-color: #f1f6df;
     color: #2f3a1c;
@@ -166,10 +155,9 @@ textarea.form-control {
         background-color: #f8fbec;
     }
 
-/* ---- Links in the theme colours instead of blue ---- */
 :root {
-    --bs-link-color-rgb: 85, 107, 47; /* #556b2f olive */
-    --bs-link-hover-color-rgb: 63, 82, 32; /* #3f5220 darker olive */
+    --bs-link-color-rgb: 85, 107, 47; 
+    --bs-link-hover-color-rgb: 63, 82, 32; 
 }
 
 a:not(.btn) {
@@ -183,7 +171,6 @@ a:not(.btn) {
         text-decoration-color: #3f5220;
     }
 
-/* the Privacy link in the footer comes from the layout's own stylesheet, so it needs a stronger selector */
 footer.footer a {
     color: #556b2f;
 }
@@ -192,7 +179,6 @@ footer.footer a {
         color: #3f5220;
     }
 
-/* ---- Details page: a boxed grid like the Movies table ---- */
 .details-box {
     border: 1px solid var(--table-lines);
 }
@@ -217,14 +203,12 @@ footer.footer a {
     padding: .75rem 1rem;
 }
 
-/* vertical line between the label and the value (side by side on wider screens) */
 @media (min-width: 576px) {
     .details-label {
         border-right: 1px solid var(--table-lines);
     }
 }
 
-/* ---- One font everywhere, heavier weight for easier reading ---- */
 html, body, input, textarea, select, button,
 .form-control, .btn, table {
     font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
@@ -250,14 +234,12 @@ th,
     font-weight: 700;
 }
 
-/* ---- Bigger menu items ---- */
 .navbar-nav .nav-link {
     font-size: 1.35rem;
     font-weight: 700;
     padding: .75rem 1.1rem;
 }
 
-/* ---- Menu item colours ---- */
 .navbar-nav .nav-link {
     color: #556b2f !important;
 }
@@ -267,24 +249,20 @@ th,
         color: #3f5220 !important;
     }
 
-/* ---- Movies table header: same tint as the Details labels ---- */
 .table thead th {
     background-color: rgba(255, 255, 255, 0.25);
     color: darkolivegreen;
 }
 
-/* ---- A very slight drop shadow on the boxed areas (Movies, Details, Create) ---- */
 .table,
 .details-box {
     box-shadow: 0 2px 6px rgba(85, 107, 47, 0.18);
 }
 
-/* the scrolling wrapper around the Movies table would cut the shadow off, this gives it a little room */
 .table-responsive {
     padding: 2px 8px 10px 2px;
 }
 
-/* Create and Edit boxes */
 .form-control {
     box-shadow: 0 2px 4px rgba(85, 107, 47, 0.2);
 }
