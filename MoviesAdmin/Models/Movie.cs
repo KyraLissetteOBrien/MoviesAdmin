@@ -22,11 +22,16 @@ namespace MoviesAdmin.Models
         public int AudienceRatingId { get; set; }
 
         [ValidateNever]
+        [ScaffoldColumn(false)]
         public Genre Genre { get; set; } = null!; // Navigation property
 
         [ValidateNever]
+        [ScaffoldColumn(false)]
         public AudienceRating AudienceRating { get; set; } = null!; // Navigation property
 
+        //[ValidateNever]
+        //[ScaffoldColumn(false)]
+        //public List<CriticReview> Reviews { get; set; } = new List<CriticReview>(); // Navigation property
 
         //2
         [StringLength(179)] // based on the Guinness World Record for the longest film title, which the english version of, is called Revenge. 
@@ -44,14 +49,14 @@ namespace MoviesAdmin.Models
         public int Runtime { get; set; }
 
         //4
-        //[Display(Name = "Viewer Classification", Prompt = "For example: Rated E, PG-13, R")]
+        //[Range(1, 6)]
         //public string Rating { get; set; } = string.Empty;
 
-        //5
-        //[Display(Prompt = "Enter as follows: Comedy, Horror, Documentary")]
+        ////5
+        //[Range(1, 10)]
         //[Required]
         //public string Genres { get; set; } = string.Empty;
-        //so far this ^ prompt works as a full website, but crunched down it gets cut off (pay mind to responsitivity in later development)
+        //so far this ^ prompt works as a full website, but crunched down it gets cut off(pay mind to responsitivity in later development)
 
         //6 
         [StringLength(4266)]

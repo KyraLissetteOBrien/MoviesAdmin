@@ -52,15 +52,15 @@
         <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Runtime)</div>
     </div>
 
-    @* <div class="row details-row">
-        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Genres)</div>
-        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Genres)</div>
-    </div> *@
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">Genre</div>
+        <div class="col-sm-9 details-value">@Model.Genre?.Title</div>
+    </div>
 
-    @* <div class="row details-row">
-        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Rating)</div>
-        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Rating)</div>
-    </div> *@
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">Rating</div>
+        <div class="col-sm-9 details-value">@Model.AudienceRating?.Title</div>
+    </div>
 
     <div class="row details-row">
         <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Synopsis)</div>
@@ -89,6 +89,10 @@
 </div>
 
 <div class="mt-3">
+    @if (User.IsInRole("Admin"))
+    {
+        <span></span>
+    }
     <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
     <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
 </div>

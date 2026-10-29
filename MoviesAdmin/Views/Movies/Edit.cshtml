@@ -33,17 +33,17 @@
                 <span asp-validation-for="Runtime" class="text-danger"></span>
             </div>
 
-            @* <div class="mb-3">
-                <label asp-for="Genres" class="form-label"></label>
-                <input asp-for="Genres" class="form-control" />
-                <span asp-validation-for="Genres" class="text-danger"></span>
-            </div> *@
+            <div class="mb-3">
+                <label asp-for="GenreId" class="control-label">Genre</label>
+                <select asp-for="GenreId" class="form-select" asp-items="ViewBag.GenreId"></select>
+                <span asp-validation-for="GenreId" class="text-danger"></span>
+            </div>
 
-            @* <div class="mb-3">
-                <label asp-for="Rating" class="form-label"></label>
-                <input asp-for="Rating" class="form-control" />
-                <span asp-validation-for="Rating" class="text-danger"></span>
-            </div> *@
+            <div class="mb-3">
+                <label asp-for="AudienceRatingId" class="control-label">Rating</label>
+                <select asp-for="AudienceRatingId" class="form-select" asp-items="ViewBag.AudienceRatingId"></select>
+                <span asp-validation-for="AudienceRatingId" class="text-danger"></span>
+            </div>
 
             <div class="mb-3">
                 <label asp-for="Synopsis" class="form-label"></label>
@@ -86,5 +86,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

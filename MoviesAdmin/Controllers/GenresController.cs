@@ -47,7 +47,7 @@ public class GenresController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Genres,Title")] Genre genre)
+    public async Task<IActionResult> Create([Bind("Id,Title,Movies")] Genre genre)
     {
         if (ModelState.IsValid)
         {
@@ -79,7 +79,7 @@ public class GenresController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Genres,Title")] Genre genre)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Movies")] Genre genre)
     {
         if (id != genre.Id)
         {

@@ -47,7 +47,7 @@ public class AudienceRatingsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,AudienceRatings,Title")] AudienceRating audiencerating)
+    public async Task<IActionResult> Create([Bind("Id,Title,Movies")] AudienceRating audiencerating)
     {
         if (ModelState.IsValid)
         {
@@ -79,7 +79,7 @@ public class AudienceRatingsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,AudienceRatings,Title")] AudienceRating audiencerating)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Movies")] AudienceRating audiencerating)
     {
         if (id != audiencerating.Id)
         {

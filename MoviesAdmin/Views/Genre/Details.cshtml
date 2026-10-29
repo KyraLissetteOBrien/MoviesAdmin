@@ -1,4 +1,4 @@
-@model MoviesAdmin.Models.AudienceRating
+@model MoviesAdmin.Models.Genre
 
 @{
     ViewData["Title"] = "Details";
@@ -7,21 +7,21 @@
 <h1>Details</h1>
 
 <div>
-    <h4>AudienceRating</h4>
+    <h4>Genre</h4>
     <hr />
     <dl class="row">
-        @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AudienceRatings)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AudienceRatings)
-        </dd> *@
-    </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Title)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Title)
+        </dd>
+    </dl>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Movies)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Movies)
         </dd>
     </dl>
 </div>

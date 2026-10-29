@@ -8,104 +8,109 @@
 <h1>All Movies</h1>
 <h4 class="mb-4">The Popcorn Amounts Are Pending Your Entry...</h4>
 
-<p>
-    <a asp-action="Create">Add New Entry</a>
-</p>
-<div class="table-responsive">
-<table class="table align-middle">
-    <thead>
-        <tr>
-            <th>Poster</th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Runtime)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Genres)
-            </th> *@
-            @* <th>
-                @Html.DisplayNameFor(model => model.Rating)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.Synopsis)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FunFact)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Directors)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-                <th class="actions-header">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        // turn line breaks typed in the textarea into <br /> so paragraphs display as paragraphs
-        // (HtmlEncode first so any < or & typed by the user is shown as text, not as HTML)
-        var descriptionWithBreaks = new HtmlString(
-            System.Net.WebUtility.HtmlEncode(item.Description)
-                .Replace("\r\n", "<br />")
-                .Replace("\n", "<br />")
-                .Replace("\r", "<br />"));
-
-        var synopsisWithBreaks = new HtmlString(
-            System.Net.WebUtility.HtmlEncode(item.Synopsis)
-                .Replace("\r\n", "<br />")
-                .Replace("\n", "<br />")
-                .Replace("\r", "<br />"));
-
-        <tr>
-            <td>
-                <img src="@item.ImageUrl" alt="@item.Title" class="poster-thumb" />
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Title)
-            </td>
-            <td>
-                @descriptionWithBreaks
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Runtime)
-            </td>
-            @* <td>
-                @Html.DisplayFor(model => item.Genres)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Rating)
-            </td> *@
-            <td>
-                @synopsisWithBreaks
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.ReleaseDate)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.FunFact)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.Directors)
-            </td>
-            <td>
-                @Html.DisplayFor(model => item.CreatedDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create">Add New Entry</a>
+    </p>
 }
-    </tbody>
-</table>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Poster</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Runtime)
+                </th>
+                <th>
+                    Genre
+                </th>
+                <th>
+                    Rating
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Synopsis)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReleaseDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FunFact)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Directors)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </th>
+                <th class="actions-header">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                // turn line breaks typed in the textarea into <br /> so paragraphs display as paragraphs
+                // (HtmlEncode first so any < or & typed by the user is shown as text, not as HTML)
+                var descriptionWithBreaks = new HtmlString(
+                    System.Net.WebUtility.HtmlEncode(item.Description)
+                        .Replace("\r\n", "<br />")
+                        .Replace("\n", "<br />")
+                        .Replace("\r", "<br />"));
+
+                var synopsisWithBreaks = new HtmlString(
+                    System.Net.WebUtility.HtmlEncode(item.Synopsis)
+                        .Replace("\r\n", "<br />")
+                        .Replace("\n", "<br />")
+                        .Replace("\r", "<br />"));
+
+                <tr>
+                    <td>
+                        <img src="@item.ImageUrl" alt="@item.Title" class="poster-thumb" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Title)
+                    </td>
+                    <td>
+                        @descriptionWithBreaks
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Runtime)
+                    </td>
+                    <td>
+                        @(item.Genre?.Title)
+                    </td>
+                    <td>
+                        @(item.AudienceRating?.Title)
+                    </td>
+                    <td>
+                        @synopsisWithBreaks
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.ReleaseDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.FunFact)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.Directors)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.CreatedDate)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
