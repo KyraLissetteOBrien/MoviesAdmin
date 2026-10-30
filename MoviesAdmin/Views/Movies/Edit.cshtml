@@ -34,15 +34,15 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="GenreId" class="control-label">Genre</label>
+                <label asp-for="GenreId" class="control-label fw-bold"></label>
                 <select asp-for="GenreId" class="form-select" asp-items="ViewBag.GenreId"></select>
                 <span asp-validation-for="GenreId" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="AudienceRatingId" class="control-label">Rating</label>
-                <select asp-for="AudienceRatingId" class="form-select" asp-items="ViewBag.AudienceRatingId"></select>
-                <span asp-validation-for="AudienceRatingId" class="text-danger"></span>
+                <label asp-for="AudienceRating" class="control-label fw-bold"></label>
+                <select asp-for="AudienceRating" class="form-select" asp-items="ViewBag.GenreId"></select>
+                <span asp-validation-for="AudienceRating" class="text-danger"></span>
             </div>
 
             <div class="mb-3">

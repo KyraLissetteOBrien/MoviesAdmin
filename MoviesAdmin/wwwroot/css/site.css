@@ -1,11 +1,18 @@
+/* ---------- Variables ---------- */
 :root {
-    --lemon-bar: #a9c86a; 
-    --leaf-page: #dcebb4; 
-    --table-lines: #8fa65a; 
+    --lemon-bar: #a9c86a;
+    --leaf-page: #dcebb4;
+    --table-lines: #8fa65a;
+    --bs-link-color-rgb: 85, 107, 47;
+    --bs-link-hover-color-rgb: 63, 82, 32;
 }
 
+/* ---------- Base ---------- */
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
+    color: darkolivegreen;
 }
 
 @media (min-width: 768px) {
@@ -14,39 +21,48 @@ html {
     }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-    color: darkolivegreen;
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-    color: darkolivegreen;
-}
-
 body {
     margin-bottom: 60px;
     color: darkolivegreen;
     background-color: var(--leaf-page);
+    font-weight: 600;
 }
 
+html, body, input, textarea, select, button,
+.form-control, .form-select, .btn, table {
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .display-4 {
+    color: darkolivegreen;
+    font-weight: 700;
+}
+
+.lead, td {
+    font-weight: 600;
+}
+
+th, .form-label, .control-label, .details-label {
+    font-weight: 700;
+}
+
+/* ---------- Navbar ---------- */
 .navbar.bg-white {
     background-color: var(--lemon-bar) !important;
+    border-bottom: 3px solid var(--table-lines) !important;
 }
 
-h1 {
-    color: darkolivegreen;
-
-    .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-        color: var(--bs-secondary-color);
-        text-align: end;
-    }
-
-    .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-        text-align: start;
-    }
+.navbar-nav .nav-link {
+    font-size: 1.35rem;
+    font-weight: 700;
+    padding: .75rem 1.1rem;
+    color: #556b2f !important;
 }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link:focus {
+        color: #3f5220 !important;
+    }
 
 .logo {
     width: 100px;
@@ -54,11 +70,25 @@ h1 {
     filter: drop-shadow(0 2px 4px rgba(85, 107, 47, 0.45));
 }
 
+/* ---------- Images ---------- */
 .thumbnail {
     width: 150px;
     height: auto;
 }
 
+.poster-thumb {
+    width: 80px;
+    aspect-ratio: 2 / 3;
+    object-fit: contain;
+}
+
+.poster-large {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+
+/* ---------- Tables ---------- */
 .table {
     --bs-table-bg: transparent;
     --bs-table-border-color: var(--table-lines);
@@ -75,41 +105,87 @@ h1 {
             border-right: none;
         }
 
-.poster-thumb {
-    width: 80px;
-    aspect-ratio: 2 / 3;
-    object-fit: contain;
+    .table thead th {
+        background-color: rgba(255, 255, 255, 0.25);
+        color: darkolivegreen;
+    }
+
+        .table thead th.actions-header {
+            background-color: #e4edc9;
+        }
+
+.table-responsive {
+    padding: 2px 8px 10px 2px;
 }
 
-.poster-large {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
+.table,
+.details-box {
+    box-shadow: 0 2px 6px rgba(85, 107, 47, 0.18);
 }
 
-.navbar.bg-white {
-    border-bottom: 3px solid var(--table-lines) !important;
+/* ---------- Details page ---------- */
+.details-box {
+    border: 1px solid var(--table-lines);
 }
 
-.form-label {
-    font-weight: 600;
+.details-row {
+    --bs-gutter-x: 0;
+    margin: 0;
+    border-bottom: 1px solid var(--table-lines);
+}
+
+    .details-row:last-child {
+        border-bottom: none;
+    }
+
+.details-label {
+    padding: .75rem 1rem;
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.details-value {
+    padding: .75rem 1rem;
+}
+
+@media (min-width: 576px) {
+    .details-label {
+        border-right: 1px solid var(--table-lines);
+    }
+}
+
+/* ---------- Forms (text boxes, textareas, dropdowns) ---------- */
+.form-label,
+.control-label {
     margin-bottom: .35rem;
 }
 
-.form-control {
-    background-color: #fffef7;
+.form-control,
+.form-select {
+    background-color: #f1f6df;
+    color: #2f3a1c;
+    font-weight: 600;
     border: 1px solid var(--table-lines);
     border-radius: .6rem;
-    padding: .6rem .9rem;
-    box-shadow: 0 1px 2px rgba(85, 107, 47, 0.12);
+    box-shadow: 0 2px 4px rgba(85, 107, 47, 0.2);
 }
 
-    .form-control:hover {
+.form-control {
+    padding: .6rem .9rem;
+}
+
+/* keeps room on the right for the dropdown arrow */
+.form-select {
+    padding: .6rem 2.25rem .6rem .9rem;
+}
+
+    .form-control:hover,
+    .form-select:hover {
         border-color: #6f8a3a;
     }
 
-    .form-control:focus {
-        background-color: #fff;
+    .form-control:focus,
+    .form-select:focus {
+        background-color: #f8fbec;
         border-color: darkolivegreen;
         box-shadow: 0 0 0 .2rem rgba(111, 138, 58, 0.3);
         color: #2f3a1c;
@@ -120,9 +196,18 @@ textarea.form-control {
     line-height: 1.5;
 }
 
+/* ---------- Buttons ---------- */
 .btn {
     border-radius: .6rem;
 }
+
+    .btn:focus,
+    .btn:active:focus,
+    .btn-link.nav-link:focus,
+    .form-check-input:focus {
+        box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+        color: darkolivegreen;
+    }
 
 .btn-primary {
     --bs-btn-bg: #6f8a3a;
@@ -146,20 +231,7 @@ textarea.form-control {
     --bs-btn-active-color: #fff;
 }
 
-.form-control {
-    background-color: #f1f6df;
-    color: #2f3a1c;
-}
-
-    .form-control:focus {
-        background-color: #f8fbec;
-    }
-
-:root {
-    --bs-link-color-rgb: 85, 107, 47; 
-    --bs-link-hover-color-rgb: 63, 82, 32; 
-}
-
+/* ---------- Links ---------- */
 a:not(.btn) {
     color: #556b2f;
     text-decoration-color: rgba(85, 107, 47, 0.5);
@@ -178,97 +250,3 @@ footer.footer a {
     footer.footer a:hover {
         color: #3f5220;
     }
-
-.details-box {
-    border: 1px solid var(--table-lines);
-}
-
-.details-row {
-    --bs-gutter-x: 0;
-    margin: 0;
-    border-bottom: 1px solid var(--table-lines);
-}
-
-    .details-row:last-child {
-        border-bottom: none;
-    }
-
-.details-label {
-    font-weight: 700;
-    padding: .75rem 1rem;
-    background-color: rgba(255, 255, 255, 0.25);
-}
-
-.details-value {
-    padding: .75rem 1rem;
-}
-
-@media (min-width: 576px) {
-    .details-label {
-        border-right: 1px solid var(--table-lines);
-    }
-}
-
-html, body, input, textarea, select, button,
-.form-control, .btn, table {
-    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
-}
-
-body {
-    font-weight: 600;
-}
-
-h1, h2, h3, h4, h5, h6, .display-4 {
-    font-weight: 700;
-}
-
-.lead,
-.form-control,
-td {
-    font-weight: 600;
-}
-
-th,
-.form-label,
-.details-label {
-    font-weight: 700;
-}
-
-.navbar-nav .nav-link {
-    font-size: 1.35rem;
-    font-weight: 700;
-    padding: .75rem 1.1rem;
-}
-
-.navbar-nav .nav-link {
-    color: #556b2f !important;
-}
-
-    .navbar-nav .nav-link:hover,
-    .navbar-nav .nav-link:focus {
-        color: #3f5220 !important;
-    }
-
-.table thead th {
-    background-color: rgba(255, 255, 255, 0.25);
-    color: darkolivegreen;
-}
-
-.table,
-.details-box {
-    box-shadow: 0 2px 6px rgba(85, 107, 47, 0.18);
-}
-
-.table-responsive {
-    padding: 2px 8px 10px 2px;
-}
-
-.form-control {
-    box-shadow: 0 2px 4px rgba(85, 107, 47, 0.2);
-}
-
-.table thead th.actions-header {
-    background-color: #e4edc9;
-}
-
-
