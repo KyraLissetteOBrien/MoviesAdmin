@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="Id" />
@@ -40,9 +40,9 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="AudienceRating" class="control-label fw-bold"></label>
-                <select asp-for="AudienceRating" class="form-select" asp-items="ViewBag.GenreId"></select>
-                <span asp-validation-for="AudienceRating" class="text-danger"></span>
+                <label asp-for="AudienceRatingId" class="control-label fw-bold"></label>
+                <select asp-for="AudienceRatingId" class="form-select" asp-items="ViewBag.AudienceRatingId"></select>
+                <span asp-validation-for="AudienceRatingId" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
@@ -74,6 +74,10 @@
                 <img src="@Model.ImageUrl" alt="@Model.Title" class="poster-large" />
             </div>
 
+            <div class="mb-3">
+                <label for="imageFile" class="form-label">Replace Poster (optional)</label>
+                <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
+            </div>
             <div class="mb-3">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

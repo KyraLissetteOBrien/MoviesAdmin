@@ -16,9 +16,11 @@ namespace MoviesAdmin.Models
 
         // db: Foreign keys
         [ForeignKey(nameof(Genre))]
+        [Display(Name = "Genre")]
         public int GenreId { get; set; }
 
         [ForeignKey(nameof(AudienceRating))]
+        [Display(Name = "Rating")]
         public int AudienceRatingId { get; set; }
 
         [ValidateNever]
