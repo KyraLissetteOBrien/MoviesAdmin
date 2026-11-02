@@ -1,39 +1,45 @@
-﻿//using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-//using System.ComponentModel.DataAnnotations;
-//using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
-//namespace MoviesAdmin.Models
-//{
-//    public class CriticReview
-//    {
-//        //1 db: Primary key
-//        public int Id { get; set; }
+namespace MoviesAdmin.Models
+{
+    public class CriticReview
+    {
+        // db: Primary key
+        public int Id { get; set; }
 
-//        // db: Foreign keys
-//        [ForeignKey(nameof(Genre))]
-//        public int GenreId { get; set; }
+        // db: Foreign key - the movie being reviewed
+        [Display(Name = "Movie")]
+        public int MovieId { get; set; }
 
-//        [ForeignKey(nameof(AudienceRating))]
-//        public int AudienceRatingId { get; set; }
+        // Navigation property
+        [ValidateNever]
+        [ScaffoldColumn(false)]
+        public Movie Movie { get; set; } = null!;
 
-//        [ValidateNever]
-//        public Genre Genre { get; set; } = null!; // Navigation property
+        // Review text, 1000 characters max 
+        [Required]
+        [StringLength(1000)]
+        [Display(Name = "Review")]
+        public string Description { get; set; } = string.Empty;
 
-//        [ValidateNever]
-//        public AudienceRating AudienceRating { get; set; } = null!; // Navigation property
+        // Numerical rating, 0 to 5 
+        [Required]
+        [Range(0, 5)]
+        [Display(Name = "Rating (0-5)")]
+        public int Rating { get; set; }
 
-//        [Required]
-//        public string Description { get; set; } = string.Empty;
+        [Display(Name = "Published")]
+        public bool IsPublished { get; set; } = false;
 
-//        //[Range(1, 5)]
-//        //public int Rating { get; set; }
+        // Filled in by the controller (never typed into a form), so it is not validated.
+        [ValidateNever]
+        [Display(Name = "Created By")]
+        public string CreatedBy { get; set; } = string.Empty;
 
-//        [Required]
-//        public bool IsPublished { get; set; }
-
-//        public string CreatedBy { get; set; } = string.Empty;
-
-//        [ScaffoldColumn(false)]
-//        public DateTime CreatedDate { get; set; } = DateTime.Now;
-//    }
-//}
+        [ScaffoldColumn(false)]
+        [DisplayFormat(DataFormatString = "{0:MMMM d, yyyy}")]
+        [Display(Name = "Created")]
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+    }
+}

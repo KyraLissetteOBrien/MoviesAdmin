@@ -46,9 +46,6 @@ namespace MoviesAdmin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AudienceRatingId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -58,22 +55,19 @@ namespace MoviesAdmin.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("GenreId")
-                        .HasColumnType("int");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<bool>("IsPublished")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("MovieId")
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AudienceRatingId");
-
-                    b.HasIndex("GenreId");
 
                     b.HasIndex("MovieId");
 
@@ -158,25 +152,13 @@ namespace MoviesAdmin.Migrations
 
             modelBuilder.Entity("MoviesAdmin.Models.CriticReview", b =>
                 {
-                    b.HasOne("MoviesAdmin.Models.AudienceRating", "AudienceRating")
-                        .WithMany()
-                        .HasForeignKey("AudienceRatingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MoviesAdmin.Models.Genre", "Genre")
-                        .WithMany()
-                        .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MoviesAdmin.Models.Movie", null)
+                    b.HasOne("MoviesAdmin.Models.Movie", "Movie")
                         .WithMany("Reviews")
-                        .HasForeignKey("MovieId");
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("AudienceRating");
-
-                    b.Navigation("Genre");
+                    b.Navigation("Movie");
                 });
 
             modelBuilder.Entity("MoviesAdmin.Models.Movie", b =>
