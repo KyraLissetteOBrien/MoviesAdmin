@@ -33,5 +33,11 @@ namespace MoviesAdmin.Controllers
         {
             return View();
         }
+
+        // Shown when a logged in user opens a page their role is not allowed to use
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

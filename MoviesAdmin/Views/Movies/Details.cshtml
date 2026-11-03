@@ -17,6 +17,9 @@
             .Replace("\r\n", "<br />")
             .Replace("\n", "<br />")
             .Replace("\r", "<br />"));
+
+    // typed copy of the critic's own review id (set by the controller), null if they have no review yet
+    int? myReviewId = ViewBag.MyReviewId;
 }
 
 <h1>Details</h1>
@@ -86,13 +89,29 @@
         <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.CreatedDate)</div>
         <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.CreatedDate)</div>
     </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">Published Reviews</div>
+        <div class="col-sm-9 details-value">@ViewBag.PublishedReviewCount</div>
+    </div>
 </div>
 
-<div class="mt-3">
-    @if (User.IsInRole("Admin"))
-    {
-        <span></span>
-    }
-    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
-    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    <div class="mt-3">
+        @if (User.IsInRole("administrator"))
+        {
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
+        }
+        @if (User.IsInRole("critic"))
+        {
+            @* One review per movie: show "My Review" if the critic already wrote one, otherwise "Write Review" *@
+            @if (myReviewId != null)
+            {
+                <a asp-controller="CriticReviews" asp-action="Details" asp-route-id="@myReviewId" class="btn btn-primary">My Review</a>
+            }
+            else
+            {
+                <a asp-controller="CriticReviews" asp-action="Create" asp-route-movieId="@Model?.Id" class="btn btn-primary">Write Review</a>
+            }
+        }
+        <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
 </div>

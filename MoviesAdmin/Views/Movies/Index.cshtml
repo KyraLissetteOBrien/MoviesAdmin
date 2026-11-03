@@ -7,7 +7,7 @@
 
 <h1>All Movies</h1>
 
-@if (User.IsInRole("Admin"))
+@if (User.IsInRole("administrator"))
 {
     <p>
         <a asp-action="Create">Add New Entry</a>
@@ -55,8 +55,7 @@
         <tbody>
             @foreach (var item in Model)
             {
-                // turn line breaks typed in the textarea into <br /> so paragraphs display as paragraphs
-                // (HtmlEncode first so any < or & typed by the user is shown as text, not as HTML)
+       
                 var descriptionWithBreaks = new HtmlString(
                     System.Net.WebUtility.HtmlEncode(item.Description)
                         .Replace("\r\n", "<br />")
@@ -104,9 +103,16 @@
                         @Html.DisplayFor(model => item.CreatedDate)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        @* Everyone can view details. Only administrators can edit or delete. *@
+                        @if (User.IsInRole("administrator"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        }
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        @if (User.IsInRole("administrator"))
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
                     </td>
                 </tr>
             }

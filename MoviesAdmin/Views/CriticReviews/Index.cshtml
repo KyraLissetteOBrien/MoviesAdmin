@@ -1,0 +1,65 @@
+@model IEnumerable<MoviesAdmin.Models.CriticReview>
+
+@{
+    ViewData["Title"] = "My Reviews";
+}
+
+<h1>My Reviews</h1>
+
+<p>
+    <a asp-action="Create">Write a New Review</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rating)
+                </th>
+                <th>Status</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </th>
+                <th class="actions-header">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Movies" asp-action="Details" asp-route-id="@item.MovieId">@item.Movie.Title</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Rating)
+                    </td>
+                    <td>
+                        @(item.IsPublished ? "Published" : "Draft")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td>
+                        @* Drafts can be edited or deleted. Published reviews are locked. *@
+                        @if (!item.IsPublished)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        }
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        @if (!item.IsPublished)
+                        {
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <p>You have not written any reviews yet. Open a movie and choose <strong>Write Review</strong> to get started.</p>
+}

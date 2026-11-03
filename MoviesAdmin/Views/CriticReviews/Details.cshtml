@@ -1,0 +1,55 @@
+@model MoviesAdmin.Models.CriticReview
+@using Microsoft.AspNetCore.Html
+
+@{
+    ViewData["Title"] = "Review Details";
+
+    // turn line breaks typed in the textarea into <br /> so paragraphs display as paragraphs
+    // (HtmlEncode first so any < or & typed by the user is shown as text, not as HTML)
+    var descriptionWithBreaks = new HtmlString(
+        System.Net.WebUtility.HtmlEncode(Model.Description)
+            .Replace("\r\n", "<br />")
+            .Replace("\n", "<br />")
+            .Replace("\r", "<br />"));
+}
+
+<h1>Review Details</h1>
+<hr />
+
+<div class="details-box">
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">Movie</div>
+        <div class="col-sm-9 details-value">
+            <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model.MovieId">@Model.Movie.Title</a>
+        </div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Rating)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.Rating)</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.Description)</div>
+        <div class="col-sm-9 details-value">@descriptionWithBreaks</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">Status</div>
+        <div class="col-sm-9 details-value">@(Model.IsPublished ? "Published (locked)" : "Draft")</div>
+    </div>
+
+    <div class="row details-row">
+        <div class="col-sm-3 details-label">@Html.DisplayNameFor(model => model.CreatedDate)</div>
+        <div class="col-sm-9 details-value">@Html.DisplayFor(model => model.CreatedDate)</div>
+    </div>
+</div>
+
+<div class="mt-3">
+    @* Only drafts can be edited. A published review can no longer be modified. *@
+    @if (!Model.IsPublished)
+    {
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    }
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>

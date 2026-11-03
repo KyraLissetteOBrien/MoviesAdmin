@@ -22,11 +22,6 @@ public class MoviesController : Controller
     // GET: Movies
     public async Task<IActionResult> Index()
     {
-        //Remove later - testing
-        var user = User.GetUserId();
-        if (user != null)
-            Console.WriteLine("Logged in user: " + user);
-
         // Retrieve all movies from the database, sorted by release date (sprint requirement)
         // Include loads the related Genre and AudienceRating rows so their names can be shown
         List<Movie> movies = await _context.Movie
@@ -59,11 +54,26 @@ public class MoviesController : Controller
             return NotFound();
         }
 
+        // Total number of PUBLISHED reviews for this movie (drafts are not counted)
+        ViewBag.PublishedReviewCount = await _context.CriticReview
+            .CountAsync(r => r.MovieId == id && r.IsPublished);
+
+        // For critics: the id of their own review of this movie (null if they have not written one yet)
+        // so the page can show "Write Review" or "My Review"
+        if (User.IsInRole("critic"))
+        {
+            string userId = User.GetUserId();
+            ViewBag.MyReviewId = await _context.CriticReview
+                .Where(r => r.MovieId == id && r.CreatedBy == userId)
+                .Select(r => (int?)r.Id)
+                .FirstOrDefaultAsync();
+        }
+
         return View(movie);
     }
 
     // GET: Movies/Create
-    [Authorize(Roles = "Admin")] // the data is stored in auth0, in the cookie
+    [Authorize(Roles = "administrator")] // the data is stored in auth0, in the cookie
     public IActionResult Create()
     {
         var audienceRatings = _context.AudienceRating.ToList();
@@ -74,7 +84,7 @@ public class MoviesController : Controller
     }
 
     // POST: Movies/Create
-    [Authorize(Roles = "Admin")] // the data is stored in auth0, in the cookie
+    [Authorize(Roles = "administrator")] // the data is stored in auth0, in the cookie
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Title,Description,Runtime,GenreId,AudienceRatingId,Synopsis,ReleaseDate,FunFact,Directors,ImageUrl")] Movie movie, IFormFile? imageFile) // collect inputs and file input from form
@@ -83,6 +93,11 @@ public class MoviesController : Controller
         if (imageFile == null || imageFile.Length == 0)
         {
             ModelState.AddModelError("imageFile", "Please choose a poster image.");
+        }
+        else if (!imageFile.ContentType.StartsWith("image/"))
+        {
+            // only allow image files to be uploaded as a poster
+            ModelState.AddModelError("imageFile", "The poster must be an image file (jpg, png, etc.).");
         }
 
         // ImageUrl is filled in below, it is not typed into the form
@@ -114,7 +129,7 @@ public class MoviesController : Controller
     }
 
     // GET: Movies/Edit/5
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "administrator")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -138,22 +153,58 @@ public class MoviesController : Controller
 
     // POST: Movies/Edit/5
     // ImageUrl and CreatedDate come back from hidden fields in the form, so editing the title keeps them.
-    [Authorize(Roles = "Admin")] // the data is stored in auth0, in the cookie
+    // imageFile is optional: when a new poster is chosen it replaces the old one.
+    [Authorize(Roles = "administrator")] // the data is stored in auth0, in the cookie
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Description,Runtime,GenreId,AudienceRatingId,Synopsis,ReleaseDate,FunFact,Directors,ImageUrl,CreatedDate")] Movie movie)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,Description,Runtime,GenreId,AudienceRatingId,Synopsis,ReleaseDate,FunFact,Directors,ImageUrl,CreatedDate")] Movie movie, IFormFile? imageFile)
     {
         if (id != movie.Id)
         {
             return NotFound();
         }
 
+        // a new poster is optional on edit, but if one is chosen it must be an image
+        bool hasNewPoster = imageFile != null && imageFile.Length > 0;
+        if (hasNewPoster && !imageFile!.ContentType.StartsWith("image/"))
+        {
+            ModelState.AddModelError("imageFile", "The poster must be an image file (jpg, png, etc.).");
+        }
+
         if (ModelState.IsValid)
         {
             try
             {
+                // Read the poster URL saved in the database (AsNoTracking so it doesn't clash with Update below)
+                string? currentImageUrl = await _context.Movie
+                    .AsNoTracking()
+                    .Where(m => m.Id == movie.Id)
+                    .Select(m => m.ImageUrl)
+                    .FirstOrDefaultAsync();
+
+                if (currentImageUrl == null)
+                {
+                    return NotFound();
+                }
+
+                // keep the saved poster unless a new one was chosen
+                movie.ImageUrl = currentImageUrl;
+
+                if (hasNewPoster)
+                {
+                    // Upload the new poster with a unique GUID file name, same as Create
+                    string fileName = Guid.NewGuid() + Path.GetExtension(imageFile!.FileName);
+                    movie.ImageUrl = await _blobService.UploadFileAsync(imageFile, fileName);
+                }
+
                 _context.Update(movie);
                 await _context.SaveChangesAsync();
+
+                // The movie saved with the new poster, so the old poster file is no longer needed
+                if (hasNewPoster)
+                {
+                    await _blobService.DeleteFileAsync(currentImageUrl);
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -177,7 +228,7 @@ public class MoviesController : Controller
     }
 
     // GET: Movies/Delete/5
-    [Authorize(Roles = "Admin")] // the data is stored in auth0, in the cookie
+    [Authorize(Roles = "administrator")] // the data is stored in auth0, in the cookie
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -198,7 +249,7 @@ public class MoviesController : Controller
     }
 
     // POST: Movies/Delete/5
-    [Authorize(Roles = "Admin")] // the data is stored in auth0, in the cookie
+    [Authorize(Roles = "administrator")] // the data is stored in auth0, in the cookie
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
@@ -219,18 +270,5 @@ public class MoviesController : Controller
     private bool MovieExists(int? id)
     {
         return _context.Movie.Any(e => e.Id == id);
-    }
-
-    public IActionResult DebugClaims()
-    {
-        var claims = string.Join("<br>",
-            User.Claims.Select(c => $"{c.Type}: {c.Value}"));
-
-        return Content(claims, "text/html");
-    }
-
-    public IActionResult TestRole()
-    {
-        return Content(User.IsInRole("Admin").ToString());
     }
 }

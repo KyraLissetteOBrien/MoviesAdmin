@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MoviesAdmin.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MoviesAdmin.Controllers
 {
@@ -11,6 +12,7 @@ namespace MoviesAdmin.Controllers
             return View();
         }
 
+        [Authorize] 
         public IActionResult Privacy()
         {
             return View();

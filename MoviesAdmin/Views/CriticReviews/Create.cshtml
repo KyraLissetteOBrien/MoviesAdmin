@@ -1,0 +1,52 @@
+@model MoviesAdmin.Models.CriticReview
+
+@{
+    ViewData["Title"] = "Write Review";
+}
+
+<h1>Write Review</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="MovieId" class="form-label"></label>
+                <select asp-for="MovieId" class="form-select" asp-items="ViewBag.MovieId"></select>
+                <span asp-validation-for="MovieId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Rating" class="form-label"></label>
+                <input asp-for="Rating" type="number" min="0" max="5" step="1" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="6" maxlength="1000"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+                <div class="form-text">Maximum 1000 characters.</div>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input asp-for="IsPublished" class="form-check-input" />
+                <label asp-for="IsPublished" class="form-check-label">Publish now</label>
+                <div class="form-text">Leave unchecked to save as a draft. Once published, a review can no longer be edited or deleted.</div>
+            </div>
+
+            <div class="mb-3">
+                <input type="submit" value="Save Review" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
