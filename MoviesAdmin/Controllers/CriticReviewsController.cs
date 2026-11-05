@@ -142,40 +142,50 @@ public class CriticReviewsController : Controller
     // POST: CriticReviews/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Description,Rating,IsPublished")] CriticReview criticReview)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,MovieId,Description,Rating,IsPublished,CreatedDate")] CriticReview criticReview)
     {
         if (id != criticReview.Id)
         {
             return NotFound();
         }
 
-        // Load the saved review from the database: it must be the critic's own and still a draft.
-        // (Checked again here on the POST so a published review can't be changed by sending the form directly.)
-        var savedReview = await _context.CriticReview
-            .Where(r => r.CreatedBy == _userId && r.IsPublished == false)
-            .Include(r => r.Movie)
-            .FirstOrDefaultAsync(r => r.Id == id);
+        // Only allow the save if this review is the logged in critic's AND still a draft.
+        // (A published review can no longer be modified.)
+        bool isMyDraft = await _context.CriticReview
+            .AnyAsync(r => r.Id == id && r.CreatedBy == _userId && r.IsPublished == false);
 
-        if (savedReview == null)
+        if (!isMyDraft)
         {
             return NotFound();
         }
 
+        // Assign userId to record (not typed in by the user)
+        criticReview.CreatedBy = _userId;
+
         if (ModelState.IsValid)
         {
-            // Only these fields can change. The movie, created by and created date stay as saved.
-            savedReview.Description = criticReview.Description;
-            savedReview.Rating = criticReview.Rating;
-            savedReview.IsPublished = criticReview.IsPublished; // ticking "Publish" locks the review
-
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Update(criticReview);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CriticReviewExists(criticReview.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
-        // Validation failed: show the form again with what the user typed
-        criticReview.Movie = savedReview.Movie;
-        criticReview.MovieId = savedReview.MovieId;
+        // Validation failed: load the movie again so the form can show its title
+        criticReview.Movie = (await _context.Movie.FindAsync(criticReview.MovieId))!;
 
         return View(criticReview);
     }
@@ -220,6 +230,11 @@ public class CriticReviewsController : Controller
         await _context.SaveChangesAsync();
 
         return RedirectToAction(nameof(Index));
+    }
+
+    private bool CriticReviewExists(int id)
+    {
+        return _context.CriticReview.Any(e => e.Id == id);
     }
 
     // Fill the movie dropdown with the movies this critic has NOT reviewed yet (one review per movie)

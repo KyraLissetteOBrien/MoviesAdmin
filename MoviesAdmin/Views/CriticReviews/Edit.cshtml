@@ -13,6 +13,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="MovieId" />
+            <input type="hidden" asp-for="CreatedDate" />
 
             @* The movie can't be changed on an existing review *@
             <div class="mb-3">

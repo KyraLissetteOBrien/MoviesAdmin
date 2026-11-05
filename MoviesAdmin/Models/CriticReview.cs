@@ -25,8 +25,8 @@ namespace MoviesAdmin.Models
 
         // Numerical rating, 0 to 5 
         [Required]
-        [Range(0, 5)]
-        [Display(Name = "Rating (0-5)")]
+        [Range(1, 5)]
+        [Display(Name = "Rating (1-5)")]
         public int Rating { get; set; }
 
         [Display(Name = "Published")]

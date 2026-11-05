@@ -20,7 +20,7 @@
 
             <div class="mb-3">
                 <label asp-for="Rating" class="form-label"></label>
-                <input asp-for="Rating" type="number" min="0" max="5" step="1" class="form-control" />
+                <input asp-for="Rating" type="number" min="0" max="5" step="1" class="form-control"/>
                 <span asp-validation-for="Rating" class="text-danger"></span>
             </div>
 
@@ -34,7 +34,7 @@
             <div class="mb-3 form-check">
                 <input asp-for="IsPublished" class="form-check-input" />
                 <label asp-for="IsPublished" class="form-check-label">Publish now</label>
-                <div class="form-text">Leave unchecked to save as a draft. Once published, a review can no longer be edited or deleted.</div>
+                <div class="text-muted">Leave unchecked to save as a draft. Once published, a review can no longer be edited or deleted.</div>
             </div>
 
             <div class="mb-3">
