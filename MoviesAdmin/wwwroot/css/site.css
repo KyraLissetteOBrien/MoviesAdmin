@@ -250,3 +250,17 @@ footer.footer a {
     footer.footer a:hover {
         color: #3f5220;
     }
+
+/* ---------- Notice box (e.g. "can't delete" messages) ---------- */
+.notice-box {
+    background-color: #556b2f;
+    color: #f1f6df;
+    border-left: 6px solid #f2d640;
+    border-radius: .6rem;
+    padding: .9rem 1.1rem;
+    box-shadow: 0 2px 6px rgba(85, 107, 47, 0.18);
+}
+
+    .notice-box strong {
+        color: #fff3a8;
+    }

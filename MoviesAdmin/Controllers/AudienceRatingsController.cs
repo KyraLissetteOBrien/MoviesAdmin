@@ -119,11 +119,14 @@ public class AudienceRatingsController : Controller
         }
 
         var audiencerating = await _context.AudienceRating
-            .FirstOrDefaultAsync(m => m.Id == id);
+    .FirstOrDefaultAsync(m => m.Id == id);
         if (audiencerating == null)
         {
             return NotFound();
         }
+
+        // How many movies still use this rating (the view blocks the delete if there are any)
+        ViewBag.MovieCount = await _context.Movie.CountAsync(m => m.AudienceRatingId == id);
 
         return View(audiencerating);
     }
@@ -133,6 +136,12 @@ public class AudienceRatingsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
+        // Don't delete a rating that movies still use (it would delete those movies too)
+        if (await _context.Movie.AnyAsync(m => m.AudienceRatingId == id))
+        {
+            return RedirectToAction(nameof(Delete), new { id });
+        }
+
         var audiencerating = await _context.AudienceRating.FindAsync(id);
         if (audiencerating != null)
         {

@@ -29,11 +29,14 @@ public class GenresController : Controller
         }
 
         var genre = await _context.Genre
-            .FirstOrDefaultAsync(m => m.Id == id);
+    .FirstOrDefaultAsync(m => m.Id == id);
         if (genre == null)
         {
             return NotFound();
         }
+
+        // Check for many movies still use this genre (confirming if the genres in use, the movie attached isn't deleted with it)
+        ViewBag.MovieCount = await _context.Movie.CountAsync(m => m.GenreId == id);
 
         return View(genre);
     }
@@ -126,6 +129,9 @@ public class GenresController : Controller
             return NotFound();
         }
 
+        // How many movies still use this genre (the view blocks the delete if there are any)
+        ViewBag.MovieCount = await _context.Movie.CountAsync(m => m.GenreId == id);
+
         return View(genre);
     }
 
@@ -134,6 +140,12 @@ public class GenresController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int? id)
     {
+        // Don't delete a genre that movies still use (it would delete those movies too)
+        if (await _context.Movie.AnyAsync(m => m.GenreId == id))
+        {
+            return RedirectToAction(nameof(Delete), new { id });
+        }
+
         var genre = await _context.Genre.FindAsync(id);
         if (genre != null)
         {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoviesAdmin.Models
 {
@@ -6,6 +7,7 @@ namespace MoviesAdmin.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "Genre")]
         public string Title { get; set; } = string.Empty;
 
         [ValidateNever]

@@ -103,7 +103,6 @@
         }
         @if (User.IsInRole("critic"))
         {
-            @* One review per movie: show "My Review" if the critic already wrote one, otherwise "Write Review" *@
             @if (myReviewId != null)
             {
                 <a asp-controller="CriticReviews" asp-action="Details" asp-route-id="@myReviewId" class="btn btn-primary">My Review</a>

@@ -103,6 +103,14 @@ public class MoviesController : Controller
         // ImageUrl is filled in below, it is not typed into the form
         ModelState.Remove(nameof(Movie.ImageUrl));
 
+        // Release date must be between the first film ever made (1888) and this year
+        // (Range only works on numbers, so a date has to be checked here)
+        // [Required] already handles an empty date, so only check when one was chosen
+        if (movie.ReleaseDate != null && (movie.ReleaseDate.Value.Year < 1888 || movie.ReleaseDate.Value.Year > DateTime.Today.Year))
+        {
+            ModelState.AddModelError("ReleaseDate", "Release date must be between 1888 and " + DateTime.Today.Year + ".");
+        }
+
         // Check if the model state is valid before adding the movie to the database
         if (ModelState.IsValid)
         {
@@ -169,6 +177,11 @@ public class MoviesController : Controller
         if (hasNewPoster && !imageFile!.ContentType.StartsWith("image/"))
         {
             ModelState.AddModelError("imageFile", "The poster must be an image file (jpg, png, etc.).");
+        }
+
+        if (movie.ReleaseDate != null && (movie.ReleaseDate.Value.Year < 1888 || movie.ReleaseDate.Value.Year > DateTime.Today.Year))
+        {
+            ModelState.AddModelError("ReleaseDate", "Release date must be between 1888 and " + DateTime.Today.Year + ".");
         }
 
         if (ModelState.IsValid)

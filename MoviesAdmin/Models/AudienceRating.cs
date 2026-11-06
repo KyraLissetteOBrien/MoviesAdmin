@@ -7,7 +7,7 @@ namespace MoviesAdmin.Models
     {
         public int Id { get; set; }
 
-        [Display(Prompt = "For example: PG-13, R")]
+        [Display(Name = "Rating", Prompt = "For example: PG-13, R")]
         public string Title { get; set; } = string.Empty;
 
         [ValidateNever]
