@@ -106,10 +106,27 @@ public class CriticReviewsController : Controller
 
         if (ModelState.IsValid)
         {
-            _context.Add(criticReview);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Add(criticReview);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException)
+            {
+                // The unique index refused a second review of the same movie (for say a double-click).
+                // If the critic's review is already saved, just show their list. Otherwise it is a different problem.
+                bool alreadySaved = await _context.CriticReview
+                    .AnyAsync(r => r.MovieId == criticReview.MovieId && r.CreatedBy == _userId);
+
+                if (alreadySaved)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                throw;
+            }
         }
 
         await FillMovieListAsync(criticReview.MovieId);

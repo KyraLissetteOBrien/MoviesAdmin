@@ -18,6 +18,12 @@ namespace MoviesAdmin.Controllers
             return View();
         }
 
+        public IActionResult Status(int code)
+        {
+            ViewBag.Code = code;
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

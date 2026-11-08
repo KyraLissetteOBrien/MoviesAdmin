@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
-    string maxDate = DateTime.Today.Year + "-12-31"; // latest date the picker allows
+    string maxDate = DateTime.Today.ToString("yyyy-MM-dd"); 
 }
 
 <h1>Create</h1>
@@ -31,14 +31,18 @@
 
             <div class="mb-3">
                 <label asp-for="GenreId" class="control-label fw-bold"></label>
-                <select asp-for="GenreId" class="form-select" asp-items="ViewBag.GenreId"></select>
+                <select asp-for="GenreId" class="form-select" asp-items="ViewBag.GenreId">
+                    <option value="">Select a Genre</option>
+                </select>
                 <span asp-validation-for="GenreId" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
                 <label asp-for="AudienceRatingId" class="control-label fw-bold"></label>
-                <select asp-for="AudienceRatingId" class="form-select" asp-items="ViewBag.AudienceRatingId"></select>
-                <span asp-validation-for="AudienceRating" class="text-danger"></span>
+                <select asp-for="AudienceRatingId" class="form-select" asp-items="ViewBag.AudienceRatingId">
+                    <option value="">Select a Rating</option>
+                </select>
+                <span asp-validation-for="AudienceRatingId" class="text-danger"></span>
             </div> 
 
             <div class="mb-3">

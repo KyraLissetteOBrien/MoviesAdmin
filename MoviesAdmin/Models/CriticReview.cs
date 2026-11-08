@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoviesAdmin.Models
 {
+    [Index(nameof(MovieId), nameof(CreatedBy), IsUnique = true)] // One review per critic per movie
     public class CriticReview
     {
         // db: Primary key
@@ -33,6 +35,7 @@ namespace MoviesAdmin.Models
         public bool IsPublished { get; set; } = false;
 
         // Filled in by the controller (never typed into a form), so it is not validated.
+        [StringLength(100)]
         [ValidateNever]
         [Display(Name = "Created By")]
         public string CreatedBy { get; set; } = string.Empty;

@@ -48,7 +48,8 @@ namespace MoviesAdmin.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -69,7 +70,8 @@ namespace MoviesAdmin.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MovieId");
+                    b.HasIndex("MovieId", "CreatedBy")
+                        .IsUnique();
 
                     b.ToTable("CriticReview");
                 });
@@ -112,11 +114,13 @@ namespace MoviesAdmin.Migrations
 
                     b.Property<string>("Directors")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<string>("FunFact")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("GenreId")
                         .HasColumnType("int");

@@ -6,10 +6,10 @@
     <h1 class="mt-5">Welcome to Lengthy Lemons</h1>
     <h2 class="fst-italic mb-4">home of the longest films</h2>
 
-    @* <p class="lead mb-4">
-        We're collecting the lengthiest movies ever made. Critics and Administrators, log in to get started.
-    </p> *@
-    @* <h3 class="mb-4">Thank you for taking part</h3> *@
+    <p class="lead mb-4">
+        We're collecting the lengthiest movies ever made. Critics, feel free to review any movie, save them as a draft and publish when you're ready! Administrators, you can manage the movie collection here. Log in to get started.
+    </p> 
+    <h3 class="mb-4">Thank you for taking part</h3>
 
     @if (User.Identity?.IsAuthenticated == true)
     {
@@ -26,7 +26,7 @@
     }
     else
     {
-        <p class="mb-3">Critics and Administrators, log in to get started.</p>
+        <p class="mb-3">Hop on in!</p>
         <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
     }
 </div>
