@@ -33,7 +33,7 @@ builder.Services.Configure<OpenIdConnectOptions>(Auth0Constants.AuthenticationSc
 builder.Services.AddControllersWithViews();
 
 // Register Azure Blob service 
-builder.Services.AddScoped<AzureStorageService>();
+builder.Services.AddScoped<IAzureStorageService, AzureStorageService>();
 
 var app = builder.Build();
 

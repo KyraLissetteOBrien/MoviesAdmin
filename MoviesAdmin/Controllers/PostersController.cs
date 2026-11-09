@@ -17,13 +17,19 @@ namespace MoviesAdmin.Controllers
         [HttpGet("/posters/{blobName}")]
         public async Task<IActionResult> Get(string blobName)
         {
-            // strip any path pieces so only a plain file name is used
-            blobName = Path.GetFileName(blobName);
+            try
+            {
+                blobName = Path.GetFileName(blobName);
 
-            var file = await _storage.GetFileAsync(blobName);
-            if (file == null) return NotFound();
+                var file = await _storage.GetFileAsync(blobName);
+                if (file == null) return NotFound();
 
-            return File(file.Value.Content, file.Value.ContentType);
+                return File(file.Value.Content, file.Value.ContentType);
+            }
+            catch (Exception ex)
+            {
+                return Content(ex.GetType().Name + ": " + ex.Message);
+            }
         }
     }
 }

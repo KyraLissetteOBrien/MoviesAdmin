@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "User Profile";
+    var fallback = User.FindFirst(c => c.Type == "picture")?.Value;
 }
 
 <div class="row">
@@ -7,7 +8,16 @@
         <h2>@ViewData["Title"]</h2>
         <div class="row">
             <div class="col-md-2">
-                <img src="@User.FindFirst(c => c.Type == "picture")?.Value" alt="User's profile picture" class="img-fluid rounded-circle" />
+                <img id="avatar" src="/avatar/me" alt="User's profile picture"
+                     class="img-fluid rounded-circle"
+                     style="aspect-ratio:1/1; object-fit:cover;"
+                     onerror="this.onerror=null; this.src='@fallback';" />
+
+                <form method="post" action="/avatar/upload" enctype="multipart/form-data" class="mt-2">
+                    @Html.AntiForgeryToken()
+                    <input type="file" name="photo" accept="image/*" class="form-control form-control-sm mb-1" />
+                    <button type="submit" class="btn btn-sm btn-primary">Upload photo</button>
+                </form>
             </div>
             <div class="col-md-10">
                 <h3>@User.Identity.Name</h3>
