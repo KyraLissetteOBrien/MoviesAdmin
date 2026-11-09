@@ -34,11 +34,10 @@ namespace MoviesAdmin.Services
 
         public async Task<string> UploadFileAsync(IFormFile file, string fileName)
         {
-            // get client for containerName (e.g. "uploads")
             var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
-            // Automatically creates the container directory in your new Docker/Azurite container if missing.
-            await containerClient.CreateIfNotExistsAsync(PublicAccessType.Blob);
+            // creates a PRIVATE container if it doesn't exist yet
+            await containerClient.CreateIfNotExistsAsync();
 
             var blobClient = containerClient.GetBlobClient(fileName);
 
@@ -51,31 +50,36 @@ namespace MoviesAdmin.Services
                 }
             };
 
-            // file I/O
             using (var stream = file.OpenReadStream())
             {
-                await blobClient.UploadAsync(stream, options); // pass in options when uploading
+                await blobClient.UploadAsync(stream, options);
             }
 
-            // return the URL for the saved file
-            return blobClient.Uri.ToString();
-
+            // relative URL, served by the app (see PostersController, next step)
+            return $"/posters/{fileName}";
         }
 
         public async Task DeleteFileAsync(string fileUrl)
         {
-            if (string.IsNullOrWhiteSpace(fileUrl) || !Uri.TryCreate(fileUrl, UriKind.Absolute, out var uri))
-            {
-                return;
-            }
+            if (string.IsNullOrWhiteSpace(fileUrl)) return;
 
-            // the blob name is the last part of the URL, e.g. 3f2b9c1e-....jpg
-            string blobName = Path.GetFileName(Uri.UnescapeDataString(uri.AbsolutePath));
+            // works for both "/posters/abc.jpg" and full blob URLs
+            string blobName = Path.GetFileName(Uri.UnescapeDataString(fileUrl));
 
             var containerClient = blobServiceClient.GetBlobContainerClient(containerName);
-
-            // DeleteIfExists so a missing file doesn't crash the delete/edit
             await containerClient.GetBlobClient(blobName).DeleteIfExistsAsync();
+        }
+
+        public async Task<(Stream Content, string ContentType)?> GetFileAsync(string blobName)
+        {
+            var blobClient = blobServiceClient
+                .GetBlobContainerClient(containerName)
+                .GetBlobClient(blobName);
+
+            if (!await blobClient.ExistsAsync()) return null;
+
+            var result = await blobClient.DownloadStreamingAsync();
+            return (result.Value.Content, result.Value.Details.ContentType);
         }
     }
 }

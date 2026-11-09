@@ -9,5 +9,7 @@
         // Delete the file a URL points to (when a movie is deleted or its poster is replaced)
         // Does nothing if the URL is empty or the file is already gone.
         public Task DeleteFileAsync(string fileUrl);
+
+        Task<(Stream Content, string ContentType)?> GetFileAsync(string blobName);
     }
 }
