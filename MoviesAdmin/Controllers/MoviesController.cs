@@ -10,10 +10,10 @@ using MoviesAdmin.Services;
 public class MoviesController : Controller
 {
     private readonly MoviesAdminContext _context;
-    private readonly AzureStorageService _blobService;
+    private readonly IAzureStorageService _blobService;
 
     // Constructor - the framework "injects" the database context and the upload service (Dependency Injection)
-    public MoviesController(MoviesAdminContext context, AzureStorageService blobService)
+    public MoviesController(MoviesAdminContext context, IAzureStorageService blobService)
     {
         _context = context;
         _blobService = blobService;
