@@ -1,11 +1,7 @@
 # MoviesAdmin
 
 What its using: C# Razor through Visual Studio to integrate C# into HTML.
-What its for: The backend system for a movie website where viewers can go to learn more about films and their genres, using BootStrap CSS. 
-What could be next: Posters for each movie, critic reviews, client specifications, & tbd.
-
-Resources: 
-https://getbootstrap.com/
+What its for: The backend system for a movie website where critics can go to review movies, and administrators can go to manage movie data, using BootStrap CSS. 
 
 Tools: 
 https://getbootstrap.com/ 
@@ -13,6 +9,6 @@ https://getbootstrap.com/
 IDE: 
 https://visualstudio.microsoft.com/ 
 
-A WIP in its early stages. 
-<img width="1268" height="668" alt="image" src="https://github.com/user-attachments/assets/d537b3d5-1174-4da0-8211-1ccbac6039c7" />
+<img width="1268" height="668" alt="image" src="https://github.com/user-attachments/assets/28f2aab7-d889-4209-b94a-911810a37b38" />
+
 
