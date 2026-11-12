@@ -254,7 +254,7 @@ public class CriticReviewsController : Controller
         return _context.CriticReview.Any(e => e.Id == id);
     }
 
-    // Fill the movie dropdown with the movies this critic has NOT reviewed yet (one review per movie)
+    // Fill the movie dropdown with the movies this critic has ~not~ reviewed yet (one review per movie)
     private async Task FillMovieListAsync(int? selectedMovieId)
     {
         var reviewedMovieIds = _context.CriticReview
